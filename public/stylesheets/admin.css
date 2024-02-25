@@ -1,0 +1,12 @@
+body {
+  height: 100vh;
+  background: lightcyan;
+  box-sizing: border-box;
+
+  display: flex; 
+  flex-direction: column; 
+}
+footer {
+  height: 5vh;
+  margin-top: auto;
+}
