@@ -1,1 +1,3 @@
 The file paths and root URL for this project is in 'private/shared/initialise.php'
+
+Based on the root URL set in initialise.pho, we've made a complete url for scripts i.e. stylesheets.
