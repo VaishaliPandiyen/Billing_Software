@@ -1,5 +1,5 @@
 <?php
-// Output buffering is enabled because..      
+// Output buffering is enabled because... <add reason>      
 ob_start();
 
 

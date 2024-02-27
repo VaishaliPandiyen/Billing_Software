@@ -57,3 +57,20 @@ function redirect($location)
     header("Location: " . $location);
     exit();
 }
+/* 
+End of HEADER ERRORS
+--------------------
+*/
+
+
+
+// These are for distinguishing between form submissions and page visits (if the request is POST or GET)  
+function is_post()
+{
+    return $_SERVER['REQUEST_METHOD'] == 'POST';
+}
+function is_get()
+{
+    return $_SERVER['REQUEST_METHOD'] == 'GET';
+}
+// -----------------
