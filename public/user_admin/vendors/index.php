@@ -34,11 +34,11 @@
 
       <?php foreach ($vendors as $v) { ?>
                     <tr>
-                      <td><?php echo $v['v_id']; ?></td>
-                        <td><?php echo $v['v_name']; ?></td>
-                      <td><a class="action" href="<?php echo url_for("/user_admin/vendors/show.php?id=" . $v['v_id']); ?>">View</a></td>
-                      <td><a class="action" href="<?php echo url_for("/user_admin/vendors/edit.php?id=" . $v['v_id']); ?>">Edit</a></td>
-                      <td><a class="action" href="<?php echo url_for("/user_admin/vendors/delete.php?id=" . $v['v_id']); ?>">Delete</a></td>
+                      <td><?php echo h($v['v_id']); ?></td>
+                        <td><?php echo h($v['v_name']); ?></td>
+                      <td><a class="action" href="<?php echo url_for("/user_admin/vendors/show.php?id=" . h(u($v['v_id']))); ?>">View</a></td>
+                      <td><a class="action" href="<?php echo url_for("/user_admin/vendors/edit.php?id=" . h(u($v['v_id']))); ?>">Edit</a></td>
+                      <td><a class="action" href="<?php echo url_for("/user_admin/vendors/delete.php?id=" . h(u($v['v_id']))); ?>">Delete</a></td>
                       </tr>
       <?php } ?>
       </table>

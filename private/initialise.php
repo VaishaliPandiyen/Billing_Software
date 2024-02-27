@@ -1,4 +1,7 @@
 <?php
+// Output buffering is enabled because..      
+ob_start();
+
 
 // Defining file paths for easier file manipulation:
 
