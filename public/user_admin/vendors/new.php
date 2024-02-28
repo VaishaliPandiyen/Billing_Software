@@ -1,5 +1,6 @@
 <?php require_once("../../../private/initialise.php");
 
+/*
 // for now, we test our errors here
 $test = $_GET['test'];
 
@@ -13,8 +14,10 @@ if ($test == '404') {
     exit();
 }
 ;
-$name = $_POST['vendor_name'] ?? '';
-$fruits = $_POST['vendor_fruits'] ?? '';
+*/
+
+$name = h($_POST['vendor_name']) ?? '';
+$fruits = h($_POST['vendor_fruits']) ?? '';
 
 if (is_post() && !$name == "" && !$fruits == "") {
 
@@ -36,7 +39,7 @@ include(SHARED_PATH . '/admin_header.php'); ?>
   <div class="subject new">
     <h1>Add Vendor</h1>
 
-    <form action="" method="POST">
+    <form action="<?php echo url_for("/user_admin/vendors/new.php");?>" method="post">
       <dl>
         <dt>Vendor Name</dt>
         <dd><input type="text" name="vendor_name" value="" /></dd>

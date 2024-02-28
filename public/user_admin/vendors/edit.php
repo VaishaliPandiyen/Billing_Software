@@ -33,11 +33,11 @@ include(SHARED_PATH . '/admin_header.php'); ?>
     <form action="<?php echo url_for("/user_admin/vendors/edit.php?id=" . h(u('id'))); ?>" method="post">
       <dl>
         <dt>Vendor Name</dt>
-        <dd><input type="text" name="vendor_name" value="<?php echo $name?>" /></dd>
+        <dd><input type="text" name="vendor_name" value="<?php echo h($name)?>" /></dd>
       </dl>
       <dl>
         <dt>Fruits</dt>
-        <dd><input type="text" name="vendor_fruits" value="<?php echo $fruits?>" /></dd>
+        <dd><input type="text" name="vendor_fruits" value="<?php echo h($fruits)?>" /></dd>
       </dl>
       </dl>
       <div id="operations">

@@ -23,6 +23,8 @@ $public_end = strpos($_SERVER['SCRIPT_NAME'], '/public') + 7; // Looks for "/pub
 $doc_root = substr($_SERVER['SCRIPT_NAME'], 0, $public_end); // Extract everything up to that point
 define("WWW_ROOT", $doc_root); // we can now use WWW_ROOT on all our pages as the root of the website, irrespective of where the root directory is wrt the machine/server
 
-
-
 require_once("functions.php");
+
+require_once("database.php");
+$db = db_connect();
+// closing the connection happens in the admin_footer.php file
