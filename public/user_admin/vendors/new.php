@@ -1,8 +1,14 @@
 <?php require_once("../../../private/initialise.php");
 
-$name = isset($_POST['v_name']) ? h($_POST['v_name']) : '';
+if (is_post()) {
+  $vendor = [];
+  $vendor["v_name"] = isset($_POST["v_name"]) ? $_POST["v_name"] : "";
 
-add_vendor($name);
+  $result = add_vendor($vendor);
+} else {
+  // $this_vendor = find_vendor($id);
+}
+;
 
 $page_title = 'Add Vendor';
 include(SHARED_PATH . '/admin_header.php');

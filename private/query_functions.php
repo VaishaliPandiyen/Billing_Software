@@ -60,21 +60,23 @@ function find_item($id)
     return $i;
 }
 
-function add_vendor($name)
+function add_vendor($vendor)
 {
     global $db;
+    $name = $vendor['v_name'];
     if (is_post() && !$name == "") {
         // Handle form values sent by new.php
         $sql = "INSERT INTO vendors ";
         $sql .= "(v_name) ";
         $sql .= "VALUES (";
-        $sql .= "'" . $name . "'";
+        $sql .= "\"" . $name . "\"";
         $sql .= ")";
         $result = mysqli_query($db, $sql);
 
         if ($result) {
             $new_id = mysqli_insert_id($db);
             redirect(url_for('/user_admin/vendors/show.php?id=' . $new_id));
+            return true;
         } else {
             echo "Error: " . $sql . "<br>" . mysqli_error($db);
             db_disconnect($db);
@@ -84,26 +86,28 @@ function add_vendor($name)
     ;
 }
 
-function edit_vendor($vendor) {
+function edit_vendor($vendor)
+{
     global $db;
 
     $sql = "UPDATE vendors SET ";
-    $sql .= "v_name= '" . $vendor['v_name'] . "' ";
+    $sql .= "v_name= \"" . $vendor['v_name'] . "\" ";
     $sql .= "WHERE v_id='" . $vendor['v_id'] . "' ";
     $sql .= "LIMIT 1";
     $result = mysqli_query($db, $sql);
-  
+
     // for update, result is true if successful
     if ($result) {
-      return true;
+        return true;
     } else {
-      mysqli_error($db);
-      db_disconnect($db);
-      exit();
+        mysqli_error($db);
+        db_disconnect($db);
+        exit();
     }
 }
 
-function delete_vendor($id) {
+function delete_vendor($id)
+{
     global $db;
 
     $sql = "DELETE FROM vendors ";
@@ -112,12 +116,19 @@ function delete_vendor($id) {
     $result = mysqli_query($db, $sql);
 
     // For DELETE statements, $result is true/false
-    if($result) {
-      return true;
+    if ($result) {
+        return true;
     } else {
-      // DELETE failed
-      echo mysqli_error($db);
-      db_disconnect($db);
-      exit;
+        // DELETE failed
+        echo mysqli_error($db);
+        db_disconnect($db);
+        exit;
     }
-  }
+}
+
+
+function per_item_profit($i)
+{
+    return round(($i['s_price'] - $i['b_price']) / ($i['s_price']) * 100, 2);
+}
+;
