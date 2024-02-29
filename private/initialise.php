@@ -24,6 +24,7 @@ $doc_root = substr($_SERVER['SCRIPT_NAME'], 0, $public_end); // Extract everythi
 define("WWW_ROOT", $doc_root); // we can now use WWW_ROOT on all our pages as the root of the website, irrespective of where the root directory is wrt the machine/server
 
 require_once("functions.php");
+require_once("query_functions.php");
 
 require_once("database.php");
 $db = db_connect();

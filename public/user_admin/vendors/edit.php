@@ -1,22 +1,22 @@
-<?php require_once("../../../private/initialise.php");
+<?php 
 
-if (!isset($_GET['id'])) {
-    redirect(url_for('/user_admin/vendors/index.php'));
-} else {
-    $id = $_GET['id'];
+require_once("../../../private/initialise.php");
+
+if(!isset($_GET['id'])) {
+  redirect(url_for('/user_admin/vendors/index.php'));
 }
-;
-
-$name = '';
-$fruits = '';
+$id = $_GET['id'];
 
 if (is_post()) {
-    $name = $_POST['vendor_name'] ?? '';
-    $fruits = $_POST['vendor_fruits'] ?? '';
+  $vendor = [];
+  $vendor["v_name"] = $_POST['vendor_name'] ?? '';
+  $vendor["v_id"] = $id; 
 
-    echo "Form parameters: <br />";
-    echo "New vendor name: " . $name . "<br />";
-    echo "Fruits: " . $fruits . "<br />";
+  $result = edit_vendor($vendor);
+  redirect(url_for("/user_admin/vendors/show.php?id=" . $id));
+
+} else {
+  $this_vendor = find_vendor($id);
 }
 ;
 
@@ -28,20 +28,15 @@ include(SHARED_PATH . '/admin_header.php'); ?>
   <a class="back-link" href="<?php echo url_for('/user_admin/vendors/index.php'); ?>">&laquo; Back to vendors</a>
 
   <div class="subject new">
-    <h1>Edit Vendor</h1>
-
-    <form action="<?php echo url_for("/user_admin/vendors/edit.php?id=" . h(u('id'))); ?>" method="post">
+ 
+    <form action="<?php echo url_for("/user_admin/vendors/edit.php?id=" . u($id)); ?>" method="post">
       <dl>
         <dt>Vendor Name</dt>
-        <dd><input type="text" name="vendor_name" value="<?php echo h($name)?>" /></dd>
-      </dl>
-      <dl>
-        <dt>Fruits</dt>
-        <dd><input type="text" name="vendor_fruits" value="<?php echo h($fruits)?>" /></dd>
+        <dd><input type="text" name="vendor_name" value="<?php echo h($this_vendor["v_name"]) ?>" /></dd>
       </dl>
       </dl>
       <div id="operations">
-        <input type="submit" value="Edit Vendor" />
+        <input type="submit" value="Save Edit" />
       </div>
     </form>
 
