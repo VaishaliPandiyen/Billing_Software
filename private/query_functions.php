@@ -86,6 +86,31 @@ function add_vendor($vendor)
     ;
 }
 
+function add_item($item)
+{
+    global $db;
+    $name = $item['f_name'];
+    if (is_post() && !$name == "") { 
+        $sql = "INSERT INTO items ";
+        $sql .= "(f_name) ";
+        $sql .= "VALUES (";
+        $sql .= "\"" . $name . "\"";
+        $sql .= ")";
+        $result = mysqli_query($db, $sql);
+
+        if ($result) {
+            $new_id = mysqli_insert_id($db);
+            redirect(url_for('/user_admin/vendors/show.php?id=' . $new_id));
+            return true;
+        } else {
+            echo "Error: " . $sql . "<br>" . mysqli_error($db);
+            db_disconnect($db);
+            exit();
+        }
+    }
+    ;
+}
+
 function edit_vendor($vendor)
 {
     global $db;
