@@ -1,0 +1,16 @@
+---------- DATA DELIMITER - SINGLE QUOTES AROUND ALL VARIABLES (EVEN INTEGERS):-
+
+Use a data delimiter around all kinds of data. Putting ‘’ around integers can help prevent SQL Injection.
+- Using data delimiters (like single quotes) around all kinds of data, including integers, helps to clearly define the boundaries of the data and prevents SQL Injection attacks by ensuring that user input is treated as harmless string literals rather than executable SQL code.
+
+1. Data Delimiter: A data delimiter is a symbol or characters used to mark the beginning and end of a piece of data. It helps to clearly identify where the data starts and ends, making it easier to parse and process.
+
+2. SQL Injection: SQL Injection is a type of cyber attack where malicious SQL statements are inserted into an entry field for execution. If the application fails to properly sanitize the input, attackers can manipulate the SQL query to perform unauthorized actions, such as accessing or modifying data.
+
+3. Using Single Quotes (''): In SQL, single quotes are commonly used to delimit string literals. For example, if you want to insert the string "Hello" into a database column, you would write the SQL query as INSERT INTO table_name (column_name) VALUES ('Hello'). The single quotes signify that "Hello" is a string literal.
+
+4. Preventing SQL Injection: When constructing SQL queries dynamically (i.e., combining SQL code with user input), it's crucial to properly sanitize the input to prevent SQL Injection. One common method is to wrap user input with single quotes. For example, if you're expecting an integer input from the user, you can put single quotes around it to treat it as a string literal.
+
+5. Example: Let's say you have a PHP variable $user_id containing an integer value. Instead of directly inserting $user_id into the SQL query, which could be vulnerable to SQL Injection, you wrap it with single quotes. So, the query would look like SELECT * FROM users WHERE id = '$user_id'. Even though $user_id is an integer, wrapping it with single quotes ensures that it's treated as a string literal, preventing SQL Injection.
+
+----------------------------------------------------------------

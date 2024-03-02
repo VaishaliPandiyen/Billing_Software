@@ -33,3 +33,10 @@ function confirm_results($results) {
         exit("Database query failed.");
     }
 }
+
+// IMPORTANT : Add this function to all input fields and URL parameters!!!
+// Short: Search wherever there are mysqli_query() and implement esc() in their variable/input fields
+function esc($db, $str) {
+    // this is used to escape SQL injection (like HTML escaping)
+    return mysqli_real_escape_string($db, $str);
+}

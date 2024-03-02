@@ -9,11 +9,17 @@ $id = $_GET['id'];
 
 if (is_post()) {
   $vendor = [];
-  $vendor["v_name"] = $_POST['vendor_name'] ?? '';
   $vendor["v_id"] = $id; 
+  $vendor["v_name"] = $_POST['vendor_name'] ?? '';
 
   $result = edit_vendor($vendor);
-  redirect(url_for("/user_admin/vendors/show.php?id=" . $id));
+
+  if ($result === true) {
+    redirect(url_for("/user_admin/vendors/show.php?id=". $id));
+  } else {
+    $errors = $result;
+    // var_dump($errors);
+  }
 
 } else {
   $this_vendor = find_vendor($id);

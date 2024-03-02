@@ -25,6 +25,7 @@ define("WWW_ROOT", $doc_root); // we can now use WWW_ROOT on all our pages as th
 
 require_once("functions.php");
 require_once("query_functions.php");
+require_once("validation.php");
 
 require_once("database.php");
 $db = db_connect();
