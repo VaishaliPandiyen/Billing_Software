@@ -93,7 +93,7 @@ function validate_item($item)
 
     //season
     $season = (string) $item['f_season'];
-    if (!has_inclusion_of($season, ["All", "Spring", "Summer", "Autumn", "Winter"])) {
+    if (!arr_includes($season, ["All", "Spring", "Summer", "Autumn", "Winter"])) {
         $errors[] = "Specify a season.";
     }
 
