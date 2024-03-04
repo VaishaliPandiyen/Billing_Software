@@ -52,7 +52,6 @@ function find_item($id)
     $q .= "WHERE f_id='" . esc($db, $id) . "'";
 
     $r = mysqli_query($db, $q);
-
     confirm_results($r);
 
     $i = mysqli_fetch_assoc($r);
