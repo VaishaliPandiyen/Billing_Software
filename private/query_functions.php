@@ -26,6 +26,19 @@ function all_items()
     return $i;
 }
 
+function all_invoices()
+{
+    global $db; 
+
+    $q = "SELECT * FROM vendors ";
+    // echo $q;
+
+    // $q .= "ORDER BY v_id ASC"; 
+    $b = mysqli_query($db, $q); 
+    confirm_results($b); 
+    return $b;
+}
+
 function find_vendor($id)
 {
     global $db;

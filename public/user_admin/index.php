@@ -1,7 +1,7 @@
-<?php require_once("../../private/initialise.php"); ?>
-<?php $page_title = "Billing Admin"; ?>
-<?php include(SHARED_PATH . "/admin_header.php"); ?>
-
+<?php require_once("../../private/initialise.php");
+$page_title = "Billing Admin";
+include(SHARED_PATH . "/admin_header.php");
+?>
 <div class="content">
     <nav>
         <h2>Admin Menu</h2>
@@ -11,4 +11,5 @@
     </nav>
 </div>
     
-<?php include(SHARED_PATH . "/admin_footer.php"); ?>
+<?php include(SHARED_PATH . "/admin_footer.php");
+?>

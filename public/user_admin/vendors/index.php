@@ -13,11 +13,11 @@ include(SHARED_PATH . "/admin_header.php");?>
 
       <table class="list">
         <tr>
-        <th>Id</th>
+          <th>Id</th>
           <th>Name</th>
           <th>&nbsp;</th>
           <th>&nbsp;</th>
-        <th>&nbsp;</th>
+          <th>&nbsp;</th>
         </tr>
 
       <?php 
@@ -26,7 +26,7 @@ include(SHARED_PATH . "/admin_header.php");?>
       ?>
         <tr>
           <td><?php echo h($v['v_id']); ?></td>
-            <td><?php echo h($v['v_name']); ?></td>
+          <td><?php echo h($v['v_name']); ?></td>
           <td><a class="action" href="<?php echo url_for("/user_admin/vendors/show.php?id=" . h(u($v['v_id']))); ?>">View</a></td>
           <td><a class="action" href="<?php echo url_for("/user_admin/vendors/edit.php?id=" . h(u($v['v_id']))); ?>">Edit</a></td>
           <td><a class="action" href="<?php echo url_for("/user_admin/vendors/delete.php?id=" . h(u($v['v_id']))); ?>">Delete</a></td>
