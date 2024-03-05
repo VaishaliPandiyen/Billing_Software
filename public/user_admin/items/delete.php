@@ -6,21 +6,20 @@ Refer to vendors/delete.php
 
 require_once('../../../private/initialise.php');
 
-if(!isset($_GET['id'])) {
+if (!isset($_GET['id'])) {
   redirect(url_for('/user_admin/items/index.php'));
 }
 $id = $_GET['id'];
 
-if(is_post()) {
-    $result = delete_item($id);
-    redirect(url_for('/user_admin/items/index.php'));
-  
-  } else {
-    $item = find_item($id);
+if (is_post()) {
+  $result = delete_item($id);
+  redirect(url_for('/user_admin/items/index.php'));
+
+} else {
+  $item = find_item($id);
 }
-
+;
 ?>
-
 <?php $page_title = 'Delete Item'; ?>
 <?php include(SHARED_PATH . '/admin_header.php'); ?>
 
@@ -41,4 +40,4 @@ if(is_post()) {
 
 </div>
 
-<?php include(SHARED_PATH . '/admin_footer.php'); ?>
+<?php include(SHARED_PATH . '/admin_footer.php');?>

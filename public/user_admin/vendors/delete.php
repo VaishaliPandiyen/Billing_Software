@@ -14,21 +14,20 @@ And it's only going to return t/f, not a record, just whether it's succeeded.
 
 require_once('../../../private/initialise.php');
 
-if(!isset($_GET['id'])) {
+if (!isset($_GET['id'])) {
   redirect(url_for('/user_admin/vendors/index.php'));
 }
 $id = $_GET['id'];
 
-if(is_post()) {
-    $result = delete_vendor($id);
-    redirect(url_for('/user_admin/vendors/index.php'));
-  
-  } else {
-    $vendor = find_vendor($id);
+if (is_post()) {
+  $result = delete_vendor($id);
+  redirect(url_for('/user_admin/vendors/index.php'));
+
+} else {
+  $vendor = find_vendor($id);
 }
-
+;
 ?>
-
 <?php $page_title = 'Delete Vendor'; ?>
 <?php include(SHARED_PATH . '/admin_header.php'); ?>
 
@@ -49,4 +48,4 @@ if(is_post()) {
 
 </div>
 
-<?php include(SHARED_PATH . '/admin_footer.php'); ?>
+<?php include(SHARED_PATH . '/admin_footer.php');?>

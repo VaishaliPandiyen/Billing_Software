@@ -19,4 +19,4 @@ include(SHARED_PATH . "/admin_header.php");
 </p>
 <a href="<?php echo url_for("/user_admin/vendors/index.php"); ?>"> &laquo; Back to vendors list</a>
 
-<?php include(SHARED_PATH . "/admin_footer.php"); ?>
+<?php include(SHARED_PATH . "/admin_footer.php");?>

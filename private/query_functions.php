@@ -163,22 +163,27 @@ function add_item($item)
     }
 
     $sql = "INSERT INTO items ";
-    $sql .= "(f_name) ";
+    $sql .= "(f_name, f_season, v_id, b_date, b_price, b_quantity, s_price) ";
     $sql .= "VALUES (";
     $sql .= "\"" . esc($db, $item['f_name']) . "\"";
+    $sql .= "\"" . esc($db, $item['f_season']) . "\"";
+    $sql .= "\"" . esc($db, $item['v_id']) . "\"";
+    $sql .= "\"" . esc($db, $item['b_date']) . "\"";
+    $sql .= "\"" . esc($db, $item['b_price']) . "\"";
+    $sql .= "\"" . esc($db, $item['b_quantity']) . "\"";
+    $sql .= "\"" . esc($db, $item['s_price']) . "\"";
     $sql .= ")";
     $result = mysqli_query($db, $sql);
 
     if ($result) {
         $new_id = mysqli_insert_id($db);
-        redirect(url_for('/user_admin/vendors/show.php?id=' . $new_id));
+        redirect(url_for('/user_admin/items/show.php?id=' . $new_id));
         return true;
     } else {
         echo "Error: " . $sql . "<br>" . mysqli_error($db);
         db_disconnect($db);
         exit();
     }
-
     ;
 }
 
@@ -205,6 +210,37 @@ function edit_vendor($vendor)
         db_disconnect($db);
         exit();
     }
+}
+
+function edit_item($item)
+{
+    global $db;
+
+    $errors = validate_item($item);
+    if (!empty($errors)) {
+        return $errors;
+    }
+
+    $sql = "UPDATE items SET";
+    $sql .= "f_name = \"" . esc($db, $item["f_name"]) . "\" ";
+    $sql .= "f_season = \"" . esc($db, $item["f_season"]) . "\" ";
+    $sql .= "v_id = \"" . esc($db, $item["v_id"]) . "\" ";
+    $sql .= "b_date = \"" . esc($db, $item["b_date"]) . "\" ";
+    $sql .= "b_price = \"" . esc($db, $item["b_price"]) . "\" ";
+    $sql .= "b_quantity = \"" . esc($db, $item["b_quantity"]) . "\" ";
+    $sql .= "s_price = \"" . esc($db, $item["s_price"]) . "\" ";
+    $sql .= "WHERE f_id='" . esc($db, $item['f_id']) . "' ";
+    $sql .= "LIMIT 1";
+    $result = mysqli_query($db, $sql);
+
+    if ($result) {
+        return true;
+    } else {
+        echo "Error: " . $sql . "<br>" . mysqli_error($db);
+        db_disconnect($db);
+        exit();
+    }
+    ;
 }
 
 function delete_vendor($id)

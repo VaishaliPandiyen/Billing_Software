@@ -5,7 +5,37 @@
 
 require_once('../../../private/initialise.php');
 
-if (is_post()) {}
+if (is_post()) {
+  $item = [];
+  // $vendor["v_name"] = isset($_POST["v_name"]) ? $_POST["v_name"] : "";
+  $item["f_name"] = $_POST["f_name"] ?? "";
+  $item["f_season"] = $_POST["f_season"] ?? "";
+  $item["v_id"] = $_POST["v_id"] ?? "";
+  $item["b_date"] = $_POST["b_date"] ?? "";
+  $item["b_price"] = $_POST["b_price"] ?? "";
+  $item["b_quantity"] = $_POST["b_quantity"] ?? "";
+  $item["s_price"] = $_POST["s_price"] ?? "";
+
+  $result = add_item($item);
+
+  if ($result === true) {
+    redirect(url_for("/user_admin/items/show.php?id=" . $item["v_id"]));
+  } else {
+    $errors = $result;
+    // var_dump($errors);
+  }
+} else {
+  // display blank form:
+  $item = [];
+  $item["f_name"] = "";
+  $item["f_season"] = "";
+  $item["v_id"] = "";
+  $item["b_date"] = "";
+  $item["b_price"] = "";
+  $item["b_quantity"] = "";
+  $item["s_price"] = "";
+}
+;
 
 /* 
 WRITE code for dropdowns here 
@@ -41,7 +71,7 @@ include SHARED_PATH . '/admin_header.php';
     <dl>
       <dt>Vendor</dt>
       <dd>
-        <select name="v_name">
+        <select name="v_id">
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -73,3 +103,4 @@ include SHARED_PATH . '/admin_header.php';
 </div>
 
 </div>
+<?php include(SHARED_PATH . '/admin_footer.php');?>

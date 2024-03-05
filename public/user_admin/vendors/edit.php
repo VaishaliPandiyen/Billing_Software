@@ -35,7 +35,7 @@ include(SHARED_PATH . '/admin_header.php'); ?>
 
   <div class="subject new">
  
-    <form action="<?php echo url_for("/user_admin/vendors/edit.php?id=" . u($id)); ?>" method="post">
+    <form action="<?php echo url_for("/user_admin/vendors/edit.php?id=" . u($id));?>" method="post">
       <dl>
         <dt>Vendor Name</dt>
         <dd><input type="text" name="vendor_name" value="<?php echo h($this_vendor["v_name"]) ?>" /></dd>
@@ -50,4 +50,4 @@ include(SHARED_PATH . '/admin_header.php'); ?>
 
 </div>
 
-<?php include(SHARED_PATH . '/admin_footer.php'); ?>
+<?php include(SHARED_PATH . '/admin_footer.php');?>
