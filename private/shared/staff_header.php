@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo h($page_title) ?></title>
     <link rel="stylesheet" href="<?php echo url_for("/stylesheets/admin.css"); ?>">
+    <script src="<?php echo url_for("/js/staff_forms.js"); ?>"></script>
 </head>
 <body>
     <header>
@@ -16,6 +17,6 @@
     </header>
     <nav>
         <!-- <ul><li> -->
-            <a href="<?php echo url_for("/user_admin/index.php"); ?>">Home</a>
+            <a href="<?php echo url_for("/user_staff/index.php"); ?>">Home</a>
         <!-- </li></ul> -->
     </nav>

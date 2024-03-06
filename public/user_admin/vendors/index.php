@@ -22,6 +22,7 @@ include(SHARED_PATH . "/admin_header.php");?>
 
       <?php 
       if ($vendors) { 
+        ?><pre><?php var_dump($vendors);?></pre><?php
         while ($v = mysqli_fetch_assoc($vendors)) { 
       ?>
         <tr>

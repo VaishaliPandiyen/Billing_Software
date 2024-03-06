@@ -30,7 +30,7 @@ function all_invoices()
 {
     global $db; 
 
-    $q = "SELECT * FROM vendors ";
+    $q = "SELECT * FROM invoice ";
     // echo $q;
 
     // $q .= "ORDER BY v_id ASC"; 
@@ -200,6 +200,62 @@ function add_item($item)
     ;
 }
 
+function add_invoice($inv, $sales)
+{
+    global $db;
+
+    // $errors = validate_invoice($inv);
+    // if (!empty($errors)) {
+    //     return $errors;
+    //     // if this is true, following code won't be executed
+    // }
+
+    $sql = "INSERT INTO invoice ";
+    $sql .= "(i_date, i_mode, i_total) ";
+    $sql .= "VALUES (";
+    $sql .= "\"" . date('Y-m-d H:i:s') . "\"";
+    $sql .= "\"" . esc($db, $inv['i_mode']) . "\"";
+    $sql .= "\"" . esc($db, $inv['i_total']) . "\"";
+    $sql .= ")";
+    $result = mysqli_query($db, $sql);
+
+    if ($result) {
+        $new_id = mysqli_insert_id($db);
+
+        // Insert sales
+        $success = true;
+        foreach ($sales as $s) {
+            $item = esc($db, $s['s_item']);
+            $quantity = intval($s['s_quantity']);
+
+            $sql_s = "INSERT INTO sale (i_id, s_quantity, s_item) ";
+            $sql_s .= "VALUES ($new_id, $quantity, '$item')";
+
+            $result_s = mysqli_query($db, $sql_s);
+            if (!$result_s) {
+                $success = false;
+                break; // If one sale insertion fails, stop and rollback
+            }
+        } 
+
+        if ($success) {
+            // All sales inserted successfully
+            redirect(url_for('/user_staff/invoices/show.php?id=' . $new_id));
+            return true;
+        } else {
+            // Rollback invoice insertion
+            mysqli_query($db, "DELETE FROM invoice WHERE i_id = $new_id");
+            echo "Error inserting sales.";
+            db_disconnect($db);
+            exit();
+        }
+    } else {
+        echo "Error: " . $sql . "<br>" . mysqli_error($db);
+        db_disconnect($db);
+        exit();
+    }
+    ;
+}
 function edit_vendor($vendor)
 {
     global $db;

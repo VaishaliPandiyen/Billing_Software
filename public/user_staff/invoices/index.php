@@ -15,6 +15,7 @@ include(SHARED_PATH . "/staff_header.php");
         <tr>
           <th>Id</th>
           <th>Date</th>
+          <th>Mode</th>
           <th>Value</th>
           <th>&nbsp;</th>
           <th>&nbsp;</th>
@@ -22,24 +23,25 @@ include(SHARED_PATH . "/staff_header.php");
 
       <?php
       if ($invoices) {
-          while ($s = mysqls_fetch_assoc($invoices)) {
+          while ($i = mysqli_fetch_assoc($invoices)) {
       ?>
       <tr>
         <!-- 
 
         WE NEED A SALES DATABASE FIRST! CREATE IT WHEN YOU HAVE INTERNET CONNECTION -- CHECK HOW TO MAKE item, quantity, value PAIR!
 
-        quantity WILL BE INPUT. item SHOULD DRAW FROM itemsDB. value SHOULD BE CALCULATED from itemsDB['s_price].
+        quantity WILL BE INPUT. item SHOULD DRAW FROM itemsDB. value SHOULD BE CALCULATED from itemsDB['i_price].
          -->
-         <td><?php echo h($s['s_id']); ?></td>
-         <td><?php echo h($s['s_date']); ?></td>
-         <td><?php echo h($s['s_tot_value']); ?></td>
-         <td><a class="action" href="<?php echo url_for("/user_staff/invoices/show.php?id=" . h(u($s['s_id']))); ?>">View</a></td>
-         <td><a class="action" href="<?php echo url_for("/user_staff/invoices/suggest_edit.php?id=" . h(u($s['s_id']))); ?>">Suggest Edit</a></td>
+         <td><?php echo h($i['i_id']); ?></td>
+         <td><?php echo h($i['i_date']); ?></td>
+         <td><?php echo h($i['i_mode']); ?></td>
+         <td><?php echo h($i['i_total']); ?></td>
+         <td><a class="action" href="<?php echo url_for("/user_staff/invoices/show.php?id=" . h(u($i['i_id']))); ?>">View</a></td>
+         <td><a class="action" href="<?php echo url_for("/user_staff/invoices/suggest_edit.php?id=" . h(u($i['i_id']))); ?>">Suggest Edit</a></td>
       </tr>
       <?php }
       } else {
-          echo "Error: " . mysqls_error($db);
+          echo "Error: " . mysqli_error($db);
       } ?>
       </table>
 
