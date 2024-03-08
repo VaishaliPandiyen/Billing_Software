@@ -1,5 +1,7 @@
 <?php require_once("../../../private/initialise.php");
 
+require_login();
+
 $vendors = all_vendors();
 // we can now loop through the results for each vendor in the html section
 

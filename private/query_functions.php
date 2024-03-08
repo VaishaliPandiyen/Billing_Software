@@ -1,4 +1,18 @@
 <?php
+
+/*
+
+INDEX:
+
+all_
+find_
+vallidate_
+add_
+edit_
+delete_
+others
+
+*/
 function all_vendors()
 {
     global $db; // we need to bring it from outside the scope of this function, as it's not passed as an argument.
@@ -19,8 +33,6 @@ function all_items()
 
     $q = "SELECT * FROM items ";
     // echo $q;
-
-    // $q .= "ORDER BY v_id ASC"; 
     $i = mysqli_query($db, $q);
     confirm_results($i);
     return $i;
@@ -28,15 +40,25 @@ function all_items()
 
 function all_invoices()
 {
-    global $db; 
+    global $db;
 
     $q = "SELECT * FROM invoice ";
     // echo $q;
-
-    // $q .= "ORDER BY v_id ASC"; 
-    $b = mysqli_query($db, $q); 
-    confirm_results($b); 
+    $b = mysqli_query($db, $q);
+    confirm_results($b);
     return $b;
+}
+
+function all_users()
+{
+    global $db;
+
+    $q = "SELECT * FROM users ";
+    // echo $q;
+    $q .= "ORDER BY last_name ASC, first_name ASC";
+    $u = mysqli_query($db, $q);
+    confirm_results($u);
+    return $u;
 }
 
 function find_vendor($id)
@@ -71,6 +93,39 @@ function find_item($id)
     mysqli_free_result($r);
 
     return $i;
+}
+
+
+function find_user($id)
+{
+    global $db;
+
+    $q = "SELECT * FROM users ";
+    $q .= "WHERE id='" . esc($db, $id) . "'";
+
+    $r = mysqli_query($db, $q);
+    confirm_results($r);
+
+    $u = mysqli_fetch_assoc($r);
+    mysqli_free_result($r);
+
+    return $u;
+}
+
+function find_user_by_username($un)
+{
+    global $db;
+
+    $sql = "SELECT * FROM users ";
+    $sql .= "WHERE username='" . esc($db, $un) . "' ";
+    $sql .= "LIMIT 1";
+
+    $r = mysqli_query($db, $sql);
+    confirm_results($r);
+    
+    $u = mysqli_fetch_assoc($r); // find first
+    mysqli_free_result($r);
+    return $u; // returns an assoc. array
 }
 
 function validate_vendor($vendor)
@@ -128,7 +183,6 @@ function validate_item($item)
     if ($check_s_price !== true) {
         $errors[] = $check_s_price;
     }
-    ;
 
     return $errors;
 }
@@ -162,7 +216,6 @@ function add_vendor($vendor)
         exit();
 
     }
-    ;
 }
 
 function add_item($item)
@@ -178,12 +231,12 @@ function add_item($item)
     $sql = "INSERT INTO items ";
     $sql .= "(f_name, f_season, v_id, b_date, b_price, b_quantity, s_price) ";
     $sql .= "VALUES (";
-    $sql .= "\"" . esc($db, $item['f_name']) . "\"";
-    $sql .= "\"" . esc($db, $item['f_season']) . "\"";
-    $sql .= "\"" . esc($db, $item['v_id']) . "\"";
-    $sql .= "\"" . esc($db, $item['b_date']) . "\"";
-    $sql .= "\"" . esc($db, $item['b_price']) . "\"";
-    $sql .= "\"" . esc($db, $item['b_quantity']) . "\"";
+    $sql .= "\"" . esc($db, $item['f_name']) . "\", ";
+    $sql .= "\"" . esc($db, $item['f_season']) . "\", ";
+    $sql .= "\"" . esc($db, $item['v_id']) . "\", ";
+    $sql .= "\"" . esc($db, $item['b_date']) . "\", ";
+    $sql .= "\"" . esc($db, $item['b_price']) . "\", ";
+    $sql .= "\"" . esc($db, $item['b_quantity']) . "\", ";
     $sql .= "\"" . esc($db, $item['s_price']) . "\"";
     $sql .= ")";
     $result = mysqli_query($db, $sql);
@@ -197,7 +250,6 @@ function add_item($item)
         db_disconnect($db);
         exit();
     }
-    ;
 }
 
 function add_invoice($inv, $sales)
@@ -213,9 +265,9 @@ function add_invoice($inv, $sales)
     $sql = "INSERT INTO invoice ";
     $sql .= "(i_date, i_mode, i_total) ";
     $sql .= "VALUES (";
-    $sql .= "\"" . date('Y-m-d H:i:s') . "\"";
-    $sql .= "\"" . esc($db, $inv['i_mode']) . "\"";
-    $sql .= "\"" . esc($db, $inv['i_total']) . "\"";
+    $sql .= "\"" . date('Y-m-d H:i:s') . "\", ";
+    $sql .= "\"" . esc($db, $inv['i_mode']) . "\", ";
+    $sql .= "\"" . esc($db, $inv['i_total']) . "\", ";
     $sql .= ")";
     $result = mysqli_query($db, $sql);
 
@@ -236,7 +288,7 @@ function add_invoice($inv, $sales)
                 $success = false;
                 break; // If one sale insertion fails, stop and rollback
             }
-        } 
+        }
 
         if ($success) {
             // All sales inserted successfully
@@ -254,7 +306,39 @@ function add_invoice($inv, $sales)
         db_disconnect($db);
         exit();
     }
-    ;
+}
+function add_user($user)
+{
+    global $db;
+
+    // $errors = validate_user($user);
+    // if (!empty($errors)) {
+    //     return $errors;
+    //     // if this is true, following code won't be executed
+    // }
+
+    // Refer: https://www.php.net/manual/en/function.password-verify.php
+    $hashed_password = password_hash($user["password"], PASSWORD_BCRYPT);
+
+    $sql = "INSERT INTO users ";
+    $sql .= "(first_name, last_name, email, username, user_type, hashed_password) ";
+    $sql .= "VALUES (";
+    $sql .= "\"" . esc($db, $user['first_name']) . "\",";
+    $sql .= "\"" . esc($db, $user['last_name']) . "\",";
+    $sql .= "\"" . esc($db, $user['email']) . "\",";
+    $sql .= "\"" . esc($db, $user['username']) . "\",";
+    $sql .= "\"" . esc($db, $user['user_type']) . "\",";
+    $sql .= "\"" . esc($db, $hashed_password) . "\"";
+    $sql .= ")";
+    $result = mysqli_query($db, $sql);
+
+    if ($result) {
+        return true;
+    } else {
+        echo "Error: " . $sql . "<br>" . mysqli_error($db);
+        db_disconnect($db);
+        exit();
+    }
 }
 
 function edit_vendor($vendor)
@@ -292,12 +376,12 @@ function edit_item($item)
     }
 
     $sql = "UPDATE items SET";
-    $sql .= "f_name = \"" . esc($db, $item["f_name"]) . "\" ";
-    $sql .= "f_season = \"" . esc($db, $item["f_season"]) . "\" ";
-    $sql .= "v_id = \"" . esc($db, $item["v_id"]) . "\" ";
-    $sql .= "b_date = \"" . esc($db, $item["b_date"]) . "\" ";
-    $sql .= "b_price = \"" . esc($db, $item["b_price"]) . "\" ";
-    $sql .= "b_quantity = \"" . esc($db, $item["b_quantity"]) . "\" ";
+    $sql .= "f_name = \"" . esc($db, $item["f_name"]) . "\", ";
+    $sql .= "f_season = \"" . esc($db, $item["f_season"]) . "\", ";
+    $sql .= "v_id = \"" . esc($db, $item["v_id"]) . "\", ";
+    $sql .= "b_date = \"" . esc($db, $item["b_date"]) . "\", ";
+    $sql .= "b_price = \"" . esc($db, $item["b_price"]) . "\", ";
+    $sql .= "b_quantity = \"" . esc($db, $item["b_quantity"]) . "\", ";
     $sql .= "s_price = \"" . esc($db, $item["s_price"]) . "\" ";
     $sql .= "WHERE f_id='" . esc($db, $item['f_id']) . "' ";
     $sql .= "LIMIT 1";
@@ -310,7 +394,39 @@ function edit_item($item)
         db_disconnect($db);
         exit();
     }
-    ;
+}
+
+function edit_user($user)
+{
+    global $db;
+
+    // password need not be reset everytime we edit a user.
+    $password_sent = !is_blank($user['password']);
+    // $errors = validate_user($user, ['password_required' => $password_sent]);
+    // if (!empty($errors)) {
+    //     return $errors;
+    // }
+
+    $hashed_password = password_hash($user["password"], PASSWORD_BCRYPT);
+
+    $sql = "UPDATE users SET";
+    $sql .= "first_name = \"" . esc($db, $user["first_name"]) . "\", ";
+    $sql .= "last_name = \"" . esc($db, $user["last_name"]) . "\", ";
+    $sql .= "email = \"" . esc($db, $user["email"]) . "\", ";
+    $sql .= "hashed_password = \"" . esc($db, $hashed_password) . "\", ";
+    // hashed_password shouldn't be last, as editing it is optional and hence it may not have an updated value. Password field in edit form will be blank on loading.
+    $sql .= "username = \"" . esc($db, $user["username"]) . "\" ";
+    $sql .= "WHERE id='" . esc($db, $user['id']) . "' ";
+    $sql .= "LIMIT 1";
+    $result = mysqli_query($db, $sql);
+
+    if ($result) {
+        return true;
+    } else {
+        echo "Error: " . $sql . "<br>" . mysqli_error($db);
+        db_disconnect($db);
+        exit();
+    }
 }
 
 function delete_vendor($id)
@@ -325,8 +441,7 @@ function delete_vendor($id)
     // For DELETE statements, $result is true/false
     if ($result) {
         return true;
-    } else {
-        // DELETE failed
+    } else { // DELETE failed
         echo mysqli_error($db);
         db_disconnect($db);
         exit;
@@ -338,8 +453,6 @@ function delete_vendor($id)
     */
 }
 
-
-
 function delete_item($id)
 {
     global $db;
@@ -349,17 +462,32 @@ function delete_item($id)
     $sql .= "LIMIT 1";
     $result = mysqli_query($db, $sql);
 
-    // For DELETE statements, $result is true/false
     if ($result) {
         return true;
-    } else {
-        // DELETE failed
+    } else { 
         echo mysqli_error($db);
         db_disconnect($db);
         exit;
     }
 }
 
+function delete_user($id)
+{
+    global $db;
+
+    $sql = "DELETE FROM users ";
+    $sql .= "WHERE id='" . esc($db, $id) . "' ";
+    $sql .= "LIMIT 1";
+    $result = mysqli_query($db, $sql);
+
+    if ($result) {
+        return true;
+    } else {
+        echo mysqli_error($db);
+        db_disconnect($db);
+        exit;
+    }
+}
 
 function per_item_profit($i)
 {

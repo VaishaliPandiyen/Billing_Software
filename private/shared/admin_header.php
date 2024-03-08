@@ -13,11 +13,11 @@
 <body>
     <header>
         <h1><?php echo $page_title ?></h1>
-        <?php if(isset($_SESSION['username'])) { ?> 
+        <?php if(is_logged_in()) { ?> 
             <p>Admin: <?php echo $_SESSION['username'] ?? "" ?></p>
             <a href="<?php echo url_for("/user_admin/logout.php"); ?>">Logout</a>
             <?php } else { ?>
-            <!-- <a href="<?php echo url_for("/user_admin/login.php"); ?>">Login</a> -->
+            <a href="<?php echo url_for("/user_admin/login.php"); ?>">Login</a>
             <?php } ?>
     </header>
     <nav>

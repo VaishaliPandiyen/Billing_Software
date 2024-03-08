@@ -92,6 +92,22 @@ function unique_vendor_name($v_name, $id = "0")
     return $page_count === 0;
 }
 
+// for login:
+function unique_username($username, $current_id="0") {
+    global $db;
+
+    $sql = "SELECT * FROM users ";
+    $sql .= "WHERE username='" . esc($db, $username) . "' ";
+    $sql .= "AND id != '" . esc($db, $current_id) . "'";
+
+    $r = mysqli_query($db, $sql);
+    $user_count = mysqli_num_rows($r);
+    mysqli_free_result($r);
+
+    return $user_count === 0;
+  }
+
+
 // Function to validate decimal input
 function validate_decimal($input)
 {
