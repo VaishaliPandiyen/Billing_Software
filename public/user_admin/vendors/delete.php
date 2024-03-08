@@ -21,6 +21,7 @@ $id = $_GET['id'];
 
 if (is_post()) {
   $result = delete_vendor($id);
+  $_SESSION['message'] = "Vendor deleted successfully";
   redirect(url_for('/user_admin/vendors/index.php'));
 
 } else {

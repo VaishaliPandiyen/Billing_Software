@@ -27,6 +27,7 @@ if (is_post()) {
     $result = edit_item($item);
 
     if ($result === true) {
+        $_SESSION['message'] = "Item updated successfully";
         redirect(url_for("/user_admin/items/show.php?id=" . $item["v_id"]));
     } else {
         $errors = $result;
@@ -54,45 +55,53 @@ include SHARED_PATH . '/admin_header.php';
   <form action="<?php echo url_for("/user_admin/items/edit.php?id=" . u($id)); ?>" method="post">
     <dl>
       <dt>Fruit Name</dt>
-      <dd><input type="text" name="f_name" value="" /></dd>
+      <dd><input type="text" name="f_name" value="<?php echo h($this_item["f_name"]) ?>" /></dd>
     </dl>
     <dl>
       <dt>Season</dt>
       <dd>
-        <select name="f_season">
-            <option value="all">All</option>
-            <option value="spring">Spring</option>
-            <option value="summer">Summer</option>
-            <option value="autumn">Autumn</option>
-            <option value="winter">Winter</option>
+        <select name="f_season" value="<?php echo h($this_item["f_season"]) ?>">
+        <?php
+            $seasons = ["all", "spring", "summer", "autumn", "winter"];
+            foreach ($seasons as $season) {
+                $selected = ($this_item["f_season"] === $season) ? " selected" : "";
+                echo "<option value=\"$season\" $selected>$season</option>";
+            }
+            ?>
         </select>
       </dd>
     </dl>
     <dl>
       <dt>Vendor</dt>
       <dd>
-        <select name="v_id">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
+        <select name="v_id" value="<?php echo h($this_item["v_id"]) ?>">
+        <?php
+            // TODO Get this from vendors db
+            // TODO DEBUG this! 
+            $vendor_ids = [1, 2, 3];
+            foreach ($vendor_ids as $vendor_id) {
+                $selected = ($this_item["v_id"] === $vendor_id) ? " selected" : "";
+                echo "<option value=\"$vendor_id\" $selected>$vendor_id</option>";
+            }
+            ?>
         </select>
       </dd>
     </dl>
     <dl>
       <dt>Buying Date</dt>
-      <dd><input type="date" name="b_date" value="" /></dd>
+      <dd><input type="date" name="b_date" value="<?php echo h($this_item["b_date"]) ?>" /></dd>
     </dl>
     <dl>
       <dt>Buying Price</dt>
-      <dd><input type="number" name="b_price" step="0.01" min="0" value="" /></dd>
+      <dd><input type="number" name="b_price" step="0.01" min="0" value="<?php echo h($this_item["b_price"]) ?>" /></dd>
     </dl>
     <dl>
       <dt>Buying Quantity</dt>
-      <dd><input type="number" name="b_quantity" step="0.01" min="0" value="" /></dd>
+      <dd><input type="number" name="b_quantity" step="0.01" min="0" value="<?php echo h($this_item["b_quantity"]) ?>" /></dd>
     </dl>
     <dl>
       <dt>Selling Price</dt>
-      <dd><input type="number" name="s_price" step="0.01" min="0" value="" /></dd>
+      <dd><input type="number" name="s_price" step="0.01" min="0" value="<?php echo h($this_item["s_price"]) ?>" /></dd>
     </dl>
     </dl>
     <div id="operations">

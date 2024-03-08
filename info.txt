@@ -1,3 +1,12 @@
+phpecho(); for php.ini location.
+
 The file paths and root URL for this project is in 'private/shared/initialise.php'
 
 Based on the root URL set in initialise.pho, we've made a complete url for scripts i.e. stylesheets.
+
+For log-in sessions, we configure sessions in php.ini file to make sure that:
+1. the session does not expire when the browser closes (which is the session default)
+2. (sessions are turned off by default)
+
+Sessions:
+1. We start it in initialise.php file.

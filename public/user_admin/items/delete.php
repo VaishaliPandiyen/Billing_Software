@@ -13,6 +13,7 @@ $id = $_GET['id'];
 
 if (is_post()) {
   $result = delete_item($id);
+  $_SESSION['message'] = "Item deleted successfully";
   redirect(url_for('/user_admin/items/index.php'));
 
 } else {

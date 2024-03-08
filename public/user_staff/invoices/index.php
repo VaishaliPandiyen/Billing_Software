@@ -26,12 +26,6 @@ include(SHARED_PATH . "/staff_header.php");
           while ($i = mysqli_fetch_assoc($invoices)) {
       ?>
       <tr>
-        <!-- 
-
-        WE NEED A SALES DATABASE FIRST! CREATE IT WHEN YOU HAVE INTERNET CONNECTION -- CHECK HOW TO MAKE item, quantity, value PAIR!
-
-        quantity WILL BE INPUT. item SHOULD DRAW FROM itemsDB. value SHOULD BE CALCULATED from itemsDB['i_price].
-         -->
          <td><?php echo h($i['i_id']); ?></td>
          <td><?php echo h($i['i_date']); ?></td>
          <td><?php echo h($i['i_mode']); ?></td>

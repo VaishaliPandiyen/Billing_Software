@@ -74,3 +74,19 @@ function is_get()
     return $_SERVER['REQUEST_METHOD'] == 'GET';
 }
 // -----------------
+
+function get_and_clear_session_msg()
+{
+    if (isset($_SESSION['message']) && $_SESSION['message'] != '') {
+        $m = $_SESSION['message'];
+        unset($_SESSION['message']);
+        return $m;
+    }
+}
+function session_msg()
+{
+    $m = get_and_clear_session_msg();
+    if (!is_blank($m)) {
+        return "<div class='session_msg'>" . h($m) . "</div>";
+    }
+}

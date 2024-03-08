@@ -19,6 +19,7 @@ if (is_post()) {
   $result = add_item($item);
 
   if ($result === true) {
+    $_SESSION['message'] = "Item added successfully";
     redirect(url_for("/user_admin/items/show.php?id=" . $item["v_id"]));
   } else {
     $errors = $result;

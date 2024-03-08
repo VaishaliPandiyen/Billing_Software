@@ -2,6 +2,8 @@
 // Output buffering is enabled because... <add reason>      
 ob_start();
 
+session_start(); // Turn on sessions
+
 
 // Defining file paths for easier file manipulation:
 

@@ -13,9 +13,16 @@
 <body>
     <header>
         <h1><?php echo $page_title ?></h1>
+        <?php if(isset($_SESSION['username'])) { ?> 
+            <p>Admin: <?php echo $_SESSION['username'] ?? "" ?></p>
+            <a href="<?php echo url_for("/user_admin/logout.php"); ?>">Logout</a>
+            <?php } else { ?>
+            <!-- <a href="<?php echo url_for("/user_admin/login.php"); ?>">Login</a> -->
+            <?php } ?>
     </header>
     <nav>
         <!-- <ul><li> -->
             <a href="<?php echo url_for("/user_admin/index.php"); ?>">Home</a>
         <!-- </li></ul> -->
+        <?php echo session_msg();?>
     </nav>

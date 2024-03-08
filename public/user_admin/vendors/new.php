@@ -8,6 +8,7 @@ if (is_post()) {
   $result = add_vendor($vendor);
 
   if ($result === true) {
+    $_SESSION['message'] = "Vendor added successfully";
     redirect(url_for("/user_admin/vendors/show.php?id=" . $vendor["v_id"]));
   } else {
     $errors = $result;

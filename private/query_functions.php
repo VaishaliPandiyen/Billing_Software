@@ -256,6 +256,7 @@ function add_invoice($inv, $sales)
     }
     ;
 }
+
 function edit_vendor($vendor)
 {
     global $db;

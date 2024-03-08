@@ -15,6 +15,7 @@ if (is_post()) {
   $result = edit_vendor($vendor);
 
   if ($result === true) {
+    $_SESSION['message'] = "Vendor updated successfully";
     redirect(url_for("/user_admin/vendors/show.php?id=". $id));
   } else {
     $errors = $result;
