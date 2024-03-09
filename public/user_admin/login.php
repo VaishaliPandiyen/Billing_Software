@@ -37,7 +37,7 @@ if (is_post()) {
 }
 
 $page_title = 'Admin Log in';
-include(SHARED_PATH . '/admin_header.php');
+// include(SHARED_PATH . '/admin_header.php');
 ?>
 <div id="content">
   <?php echo display_errors($errors); ?>

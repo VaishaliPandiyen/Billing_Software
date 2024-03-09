@@ -1,7 +1,5 @@
 <?php require_once("../../../private/initialise.php");
 
-require_login();
-
 $inv_items = all_items();
 
 $page_title = "Inventory";

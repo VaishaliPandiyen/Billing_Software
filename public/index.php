@@ -3,7 +3,7 @@
 // phpinfo();
 
 require_once("../private/initialise.php");
-include(SHARED_PATH . '/admin_header.php');
+// include(SHARED_PATH . '/admin_header.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">

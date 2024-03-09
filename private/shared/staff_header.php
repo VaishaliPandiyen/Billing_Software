@@ -14,9 +14,14 @@
 <body>
     <header>
         <h1><?php echo $page_title ?></h1>
-    </header>
-    <nav>
-        <!-- <ul><li> -->
-            <a href="<?php echo url_for("/user_staff/index.php"); ?>">Home</a>
-        <!-- </li></ul> -->
-    </nav>
+        <?php if (is_logged_in()) { ?> 
+                <p>Staff: <?php echo $_SESSION['username'] ?? "" ?></p>
+                <a href="<?php echo url_for("/user_admin/logout.php"); ?>">Logout</a>
+            </header>
+            <nav>
+                <!-- <ul><li> -->
+                    <a href="<?php echo url_for("/user_staff/index.php"); ?>">Home</a>
+                <!-- </li></ul> -->
+            </nav>
+        <?php } 
+        require_login(); ?>
