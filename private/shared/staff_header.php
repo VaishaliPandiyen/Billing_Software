@@ -1,5 +1,5 @@
 <?php if (!isset($page_title)) {
-    $page_title = "Billing Schmbilling";
+    $page_title = "Billing Staff";
 } ?>
 
 <!DOCTYPE html>
