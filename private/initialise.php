@@ -30,6 +30,24 @@ require_once("query_functions.php");
 require_once("validation.php");
 require_once("auth_users.php");
 
+
+// LOADING ALL CLASSES & AUTOLOAD:
+
+// here, * is a wildcard character. Using glob, we can get all the files in the classes directory
+foreach (glob("classes/*.class.php") as $f) {
+    require_once($f);
+}
+function my_autoload($class)
+{
+    if (preg_match('/\A\w+\Z/', $class)) {
+        include('classes/' . $class . "class.php");
+    }
+}
+spl_autoload_register("my_autoload");
+
+// END OF LOADING CLASSES
+
+
 require_once("database.php");
 $db = db_connect();
 // closing the connection happens in the admin_footer.php file
