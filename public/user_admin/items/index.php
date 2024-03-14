@@ -40,7 +40,7 @@ include(SHARED_PATH . "/admin_header.php");
       </tr>
 
       <?php if ($items) {
-        while ($i = mysqli_fetch_assoc($items)) {
+        while ($i = $items->fetch_assoc()) {
       ?>
         <tr>
           <td><?php echo h($i['f_id']); ?></td>
@@ -60,7 +60,7 @@ include(SHARED_PATH . "/admin_header.php");
       <?php 
     }
       } else {
-        echo "Error: " . mysqli_error($db);
+        echo "Error: " . $db->error;
       }
       ?>
     </table>

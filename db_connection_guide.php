@@ -13,7 +13,7 @@ $dbpass = 'secretpassword';
 $dbname = 'dbname';
 
 // 1. Create a database connection
-$connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+$connection = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 
 // Test if connection succeeded
 if(mysqli_connect_errno()) {
@@ -25,7 +25,7 @@ if(mysqli_connect_errno()) {
 
 // 2. Perform database query
 $query = "SELECT * FROM tablename";
-$result_set = mysqli_query($connection, $query);
+$result_set = $connection->query($query);
 
 // Test if query succeeded
 if (!$result_set) {
@@ -33,12 +33,12 @@ if (!$result_set) {
 }
 
 // 3. Use returned data (if any)
-while($table = mysqli_fetch_assoc($result_set)) {
+while($table = $result_set->fetch_assoc()) {
   echo $table["key_x"] . "<br />";
 }
 
 // 4. Release returned data
-mysqli_free_result($result_set);
+$result_set->free();
 
 // 5. Close database connection
 mysqli_close($connection);

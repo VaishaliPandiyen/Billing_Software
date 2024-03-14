@@ -22,7 +22,7 @@ include(SHARED_PATH . "/admin_header.php");?>
 
       <?php 
       if ($vendors) { 
-        while ($v = mysqli_fetch_assoc($vendors)) { 
+        while ($v = $vendors->fetch_assoc()) { 
       ?>
         <tr>
           <td><?php echo h($v['v_id']); ?></td>
@@ -33,7 +33,7 @@ include(SHARED_PATH . "/admin_header.php");?>
           </tr>
       <?php } 
       } else {
-        echo "Error: " . mysqli_error($db);
+        echo "Error: " . $db->error;
       } ?>
       </table>
 

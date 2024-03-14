@@ -85,9 +85,9 @@ function unique_vendor_name($v_name, $id = "0")
     $sql .= "WHERE v_name='" . esc($db, $v_name) . "' ";
     $sql .= "AND id != '" . esc($db, $id) . "'";
 
-    $page_set = mysqli_query($db, $sql);
-    $page_count = mysqli_num_rows($page_set);
-    mysqli_free_result($page_set);
+    $page_set = $db->query($sql);
+    $page_count = $page_set->num_rows;
+    $page_set->free();
 
     return $page_count === 0;
 }
@@ -100,9 +100,9 @@ function unique_username($username, $current_id="0") {
     $sql .= "WHERE username='" . esc($db, $username) . "' ";
     $sql .= "AND id != '" . esc($db, $current_id) . "'";
 
-    $r = mysqli_query($db, $sql);
-    $user_count = mysqli_num_rows($r);
-    mysqli_free_result($r);
+    $r = $db->query($sql);
+    $user_count = $r->num_rows;
+    $r->free();
 
     return $user_count === 0;
   }

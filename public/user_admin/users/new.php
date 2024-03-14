@@ -14,7 +14,7 @@ if(is_post()) {
 
   $result = add_user($user);
   if($result === true) {
-    $new_id = mysqli_insert_id($db);
+    $new_id = $db->insert_id;
     $_SESSION['message'] = 'User created.';
     redirect(url_for('/user_admin/users/index.php'));
     // redirect(url_for('/user_admin/users/show.php?id=' . $new_id));

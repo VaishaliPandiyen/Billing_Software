@@ -2,7 +2,7 @@
 
 $items = all_items();
 $fruits = [];
-while ($i = mysqli_fetch_assoc($items)) {
+while ($i = $items->fetch_assoc()) {
     $price = (float) $i["s_price"];
     $fruits[$i["f_name"]] = $price;
     var_dump($i["f_name"] . ' sells at £' . $price, '<br/>');

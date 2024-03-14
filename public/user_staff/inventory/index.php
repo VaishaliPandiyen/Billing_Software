@@ -19,7 +19,7 @@ include(SHARED_PATH . "/staff_header.php");
 
       <?php
       if ($inv_items) {
-          while ($f = mysqli_fetch_assoc($inv_items)) {
+          while ($f = $inv_items->fetch_assoc()) {
       ?>
       <tr>
          <td><?php echo h($f['f_id']); ?></td>
@@ -31,7 +31,7 @@ include(SHARED_PATH . "/staff_header.php");
       </tr>
       <?php /* end while inv_items */}
       } else {
-          echo "Error: " . mysqli_error($db);
+          echo "Error: " . $db->error;
       } ?>
       </table>
 

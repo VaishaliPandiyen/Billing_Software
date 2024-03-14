@@ -22,7 +22,7 @@ include(SHARED_PATH . '/admin_header.php');
 
       <?php 
       if ($users) { 
-        while ($u = mysqli_fetch_assoc($users)) { 
+        while ($u = $users->fetch_assoc()) { 
       ?>
         <tr>
           <td><?php echo h($u['id']); ?></td>
@@ -34,7 +34,7 @@ include(SHARED_PATH . '/admin_header.php');
           </tr>
       <?php } 
       } else {
-        echo "Error: " . mysqli_error($db);
+        echo "Error: " . $db->error;
       } ?>
       </table>
 </div>

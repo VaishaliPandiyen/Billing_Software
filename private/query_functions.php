@@ -22,7 +22,7 @@ function all_vendors()
     // echo $q;
 
     // $q .= "ORDER BY v_id ASC"; // this is SQLv8 concatenation
-    $v = mysqli_query($db, $q); //the $db is from initialise.php where we opened the database connection
+    $v = $db->query($q); //the $db is from initialise.php where we opened the database connection
     confirm_results($v); // function defined in database.php to handle no results due to MySQL query errors
     return $v;
 }
@@ -33,7 +33,7 @@ function all_items()
 
     $q = "SELECT * FROM items ";
     // echo $q;
-    $i = mysqli_query($db, $q);
+    $i = $db->query($q);
     confirm_results($i);
     return $i;
 }
@@ -44,7 +44,7 @@ function all_invoices()
 
     $q = "SELECT * FROM invoice ";
     // echo $q;
-    $b = mysqli_query($db, $q);
+    $b = $db->query($q);
     confirm_results($b);
     return $b;
 }
@@ -56,7 +56,7 @@ function all_users()
     $q = "SELECT * FROM users ";
     // echo $q;
     $q .= "ORDER BY last_name ASC, first_name ASC";
-    $u = mysqli_query($db, $q);
+    $u = $db->query($q);
     confirm_results($u);
     return $u;
 }
@@ -69,13 +69,13 @@ function find_vendor($id)
     // Here, we are using DATA DELIMITER -- '' around the integer v_id. Check "../../explainers.txt DATA DELIMITER"
     $q .= "WHERE v_id='" . esc($db, $id) . "'";
 
-    $r = mysqli_query($db, $q);
+    $r = $db->query($q);
     confirm_results($r);
 
     // to extract the $r into an array:
-    $v = mysqli_fetch_assoc($r);
+    $v = $r->fetch_assoc();
 
-    mysqli_free_result($r); // now that we have the array, we can free up the memory:
+    $r->free(); // now that we have the array, we can free up the memory:
     return $v; // Return the vendor data
 }
 
@@ -86,11 +86,11 @@ function find_item($id)
     $q = "SELECT * FROM items ";
     $q .= "WHERE f_id='" . esc($db, $id) . "'";
 
-    $r = mysqli_query($db, $q);
+    $r = $db->query($q);
     confirm_results($r);
 
-    $i = mysqli_fetch_assoc($r);
-    mysqli_free_result($r);
+    $i = $r->fetch_assoc();
+    $r->free();
 
     return $i;
 }
@@ -103,11 +103,11 @@ function find_user($id)
     $q = "SELECT * FROM users ";
     $q .= "WHERE id='" . esc($db, $id) . "'";
 
-    $r = mysqli_query($db, $q);
+    $r = $db->query($q);
     confirm_results($r);
 
-    $u = mysqli_fetch_assoc($r);
-    mysqli_free_result($r);
+    $u = $r->fetch_assoc();
+    $r->free();
 
     return $u;
 }
@@ -120,11 +120,11 @@ function find_user_by_username($un)
     $sql .= "WHERE username='" . esc($db, $un) . "' ";
     $sql .= "LIMIT 1";
 
-    $r = mysqli_query($db, $sql);
+    $r = $db->query($sql);
     confirm_results($r);
     
-    $u = mysqli_fetch_assoc($r); // find first
-    mysqli_free_result($r);
+    $u = $r->fetch_assoc(); // find first
+    $r->free();
     return $u; // returns an assoc. array
 }
 
@@ -204,14 +204,14 @@ function add_vendor($vendor)
     $sql .= "VALUES (";
     $sql .= "\"" . esc($db, $vendor['v_name']) . "\"";
     $sql .= ")";
-    $result = mysqli_query($db, $sql);
+    $result = $db->query($sql);
 
     if ($result) {
-        $new_id = mysqli_insert_id($db);
+        $new_id = $db->insert_id;
         redirect(url_for('/user_admin/vendors/show.php?id=' . $new_id));
         return true;
     } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($db);
+        echo "Error: " . $sql . "<br>" . $db->error;
         db_disconnect($db);
         exit();
 
@@ -239,14 +239,14 @@ function add_item($item)
     $sql .= "\"" . esc($db, $item['b_quantity']) . "\", ";
     $sql .= "\"" . esc($db, $item['s_price']) . "\"";
     $sql .= ")";
-    $result = mysqli_query($db, $sql);
+    $result = $db->query($sql);
 
     if ($result) {
-        $new_id = mysqli_insert_id($db);
+        $new_id = $db->insert_id;
         redirect(url_for('/user_admin/items/show.php?id=' . $new_id));
         return true;
     } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($db);
+        echo "Error: " . $sql . "<br>" . $db->error;
         db_disconnect($db);
         exit();
     }
@@ -269,10 +269,10 @@ function add_invoice($inv, $sales)
     $sql .= "\"" . esc($db, $inv['i_mode']) . "\", ";
     $sql .= "\"" . esc($db, $inv['i_total']) . "\", ";
     $sql .= ")";
-    $result = mysqli_query($db, $sql);
+    $result = $db->query($sql);
 
     if ($result) {
-        $new_id = mysqli_insert_id($db);
+        $new_id = $db->insert_id;
 
         // Insert sales
         $success = true;
@@ -283,7 +283,7 @@ function add_invoice($inv, $sales)
             $sql_s = "INSERT INTO sale (i_id, s_quantity, s_item) ";
             $sql_s .= "VALUES ($new_id, $quantity, '$item')";
 
-            $result_s = mysqli_query($db, $sql_s);
+            $result_s = $db->query($sql_s);
             if (!$result_s) {
                 $success = false;
                 break; // If one sale insertion fails, stop and rollback
@@ -296,13 +296,13 @@ function add_invoice($inv, $sales)
             return true;
         } else {
             // Rollback invoice insertion
-            mysqli_query($db, "DELETE FROM invoice WHERE i_id = $new_id");
+            $db->query("DELETE FROM invoice WHERE i_id = $new_id");
             echo "Error inserting sales.";
             db_disconnect($db);
             exit();
         }
     } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($db);
+        echo "Error: " . $sql . "<br>" . $db->error;
         db_disconnect($db);
         exit();
     }
@@ -330,12 +330,12 @@ function add_user($user)
     $sql .= "\"" . esc($db, $user['user_type']) . "\",";
     $sql .= "\"" . esc($db, $hashed_password) . "\"";
     $sql .= ")";
-    $result = mysqli_query($db, $sql);
+    $result = $db->query($sql);
 
     if ($result) {
         return true;
     } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($db);
+        echo "Error: " . $sql . "<br>" . $db->error;
         db_disconnect($db);
         exit();
     }
@@ -354,13 +354,13 @@ function edit_vendor($vendor)
     $sql .= "v_name= \"" . esc($db, $vendor['v_name']) . "\" ";
     $sql .= "WHERE v_id='" . esc($db, $vendor['v_id']) . "' ";
     $sql .= "LIMIT 1";
-    $result = mysqli_query($db, $sql);
+    $result = $db->query($sql);
 
     // for update, result is true if successful
     if ($result) {
         return true;
     } else {
-        mysqli_error($db);
+        $db->error;
         db_disconnect($db);
         exit();
     }
@@ -385,12 +385,12 @@ function edit_item($item)
     $sql .= "s_price = \"" . esc($db, $item["s_price"]) . "\" ";
     $sql .= "WHERE f_id='" . esc($db, $item['f_id']) . "' ";
     $sql .= "LIMIT 1";
-    $result = mysqli_query($db, $sql);
+    $result = $db->query($sql);
 
     if ($result) {
         return true;
     } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($db);
+        echo "Error: " . $sql . "<br>" . $db->error;
         db_disconnect($db);
         exit();
     }
@@ -418,12 +418,12 @@ function edit_user($user)
     $sql .= "username = \"" . esc($db, $user["username"]) . "\" ";
     $sql .= "WHERE id='" . esc($db, $user['id']) . "' ";
     $sql .= "LIMIT 1";
-    $result = mysqli_query($db, $sql);
+    $result = $db->query($sql);
 
     if ($result) {
         return true;
     } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($db);
+        echo "Error: " . $sql . "<br>" . $db->error;
         db_disconnect($db);
         exit();
     }
@@ -436,13 +436,13 @@ function delete_vendor($id)
     $sql = "DELETE FROM vendors ";
     $sql .= "WHERE v_id='" . esc($db, $id) . "' ";
     $sql .= "LIMIT 1";
-    $result = mysqli_query($db, $sql);
+    $result = $db->query($sql);
 
     // For DELETE statements, $result is true/false
     if ($result) {
         return true;
     } else { // DELETE failed
-        echo mysqli_error($db);
+        echo $db->error;
         db_disconnect($db);
         exit;
     }
@@ -460,12 +460,12 @@ function delete_item($id)
     $sql = "DELETE FROM items ";
     $sql .= "WHERE f_id='" . esc($db, $id) . "' ";
     $sql .= "LIMIT 1";
-    $result = mysqli_query($db, $sql);
+    $result = $db->query($sql);
 
     if ($result) {
         return true;
     } else { 
-        echo mysqli_error($db);
+        echo $db->error;
         db_disconnect($db);
         exit;
     }
@@ -478,12 +478,12 @@ function delete_user($id)
     $sql = "DELETE FROM users ";
     $sql .= "WHERE id='" . esc($db, $id) . "' ";
     $sql .= "LIMIT 1";
-    $result = mysqli_query($db, $sql);
+    $result = $db->query($sql);
 
     if ($result) {
         return true;
     } else {
-        echo mysqli_error($db);
+        echo $db->error;
         db_disconnect($db);
         exit;
     }

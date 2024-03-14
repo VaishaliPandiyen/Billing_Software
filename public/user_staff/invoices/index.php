@@ -23,7 +23,7 @@ include(SHARED_PATH . "/staff_header.php");
 
       <?php
       if ($invoices) {
-          while ($i = mysqli_fetch_assoc($invoices)) {
+          while ($i = $invoices->fetch_assoc()) {
       ?>
       <tr>
          <td><?php echo h($i['i_id']); ?></td>
@@ -35,7 +35,7 @@ include(SHARED_PATH . "/staff_header.php");
       </tr>
       <?php }
       } else {
-          echo "Error: " . mysqli_error($db);
+          echo "Error: " . $db->error;
       } ?>
       </table>
 
