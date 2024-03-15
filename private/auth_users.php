@@ -42,3 +42,4 @@ function require_login()
         // Do nothing, let the rest of the page proceed
     }
 }
+

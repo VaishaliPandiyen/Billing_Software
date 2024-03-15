@@ -2,7 +2,6 @@
 
 abstract class Crud
 {
-
     static protected $db;
     static protected $table_name = "";
     static protected $id = "";
@@ -25,9 +24,7 @@ abstract class Crud
         while ($record = $result->fetch_assoc()) {
             $object_array[] = $instance->instantiate($record);
         }
-
         $result->free();
-
         return $object_array;
     }
 
@@ -59,14 +56,12 @@ abstract class Crud
 
     abstract protected function instantiate($record);
 
-    protected function validate()
-    {
-        $this->errors = [];
-
-        // space for custom validations
-
-        return $this->errors;
-    }
+    abstract protected function validate();
+    // {
+    //     $this->errors = [];
+    //     // SPACE FOR CUSTOM VALIDATIONS
+    //     return $this->errors;
+    // }
 
     protected function create()
     {
@@ -77,17 +72,19 @@ abstract class Crud
 
         $attributes = $this->sanitized_attributes();
         $sql = "INSERT INTO " . static::$table_name . " (";
+        // making a string out of the array:
         $sql .= join(', ', array_keys($attributes));
         $sql .= ") VALUES ('";
         $sql .= join("', '", array_values($attributes));
         $sql .= "')";
         $result = self::$db->query($sql);
         if ($result) {
-            $this->id = self::$db->insert_id;
+            static::$id = self::$db->insert_id;
         }
         return $result;
     }
 
+    // In update & delete, ID isn't passed in as the methods are called on specific records' objects. ID is accessed directly from the object's properties. 
     protected function update()
     {
         $this->validate();
@@ -113,7 +110,7 @@ abstract class Crud
     {
         // A new record will not have an ID yet
         if (isset($this->id)) {
-            return $this->update();
+            echo "Editing record";
         } else {
             return $this->create();
         }
@@ -128,19 +125,24 @@ abstract class Crud
         }
     }
 
-    // Properties which have database columns, excluding ID
+    // Properties with db columns (excluding ID):--
+    // Created for dynamically adding key and value during CRUD ops
     public function attributes()
     {
         $attributes = [];
+        // loop through all columns
         foreach (static::$db_columns as $column) {
-            if ($column == 'id') {
-                continue;
+            // since db_colums have id but we don't need to CRUD 'em
+            if ($column == static::$id) {
+                continue; // skips id
             }
+            // sets the associative array's keys using db_column's values
             $attributes[$column] = $this->$column;
         }
         return $attributes;
     }
 
+    // esc fn for input values:--
     protected function sanitized_attributes()
     {
         $sanitized = [];

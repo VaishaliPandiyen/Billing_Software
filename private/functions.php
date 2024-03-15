@@ -104,3 +104,11 @@ function session_msg()
         return "<div class='session_msg'>" . h($m) . "</div>";
     }
 }
+//   function session_msg() {
+//     global $session;
+//     $msg = $session->message();
+//     if(isset($msg) && $msg != '') {
+//       $session->clear_message();
+//       return '<div id="message">' . h($msg) . '</div>';
+//     }
+//   }

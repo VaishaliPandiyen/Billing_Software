@@ -3,38 +3,27 @@
 <!-- Check this out for adding selectors for seasons: https://www.linkedin.com/learning/php-with-mysql-essential-training-1-the-basics/form-options-from-database-data-14185925?contextUrn=urn%3Ali%3AlyndaLearningPath%3A57bdd8a292015ae4c0cb990f&resume=false -->
 <?php
 
-require_once('../../../private/initialise.php');
+require_once ('../../../private/initialise.php');
 
 if (is_post()) {
-  $item = [];
-  // $vendor["v_name"] = isset($_POST["v_name"]) ? $_POST["v_name"] : "";
-  $item["f_name"] = $_POST["f_name"] ?? "";
-  $item["f_season"] = $_POST["f_season"] ?? "";
-  $item["v_id"] = $_POST["v_id"] ?? "";
-  $item["b_date"] = $_POST["b_date"] ?? "";
-  $item["b_price"] = $_POST["b_price"] ?? "";
-  $item["b_quantity"] = $_POST["b_quantity"] ?? "";
-  $item["s_price"] = $_POST["s_price"] ?? "";
-
-  $result = add_item($item);
+  //  $_POST["item"] has data from form fields with name="item[x]" instead of writing $args['x'] = $_POST['x'] ?? NULL;
+  $args = $_POST['item'];
+  // Remember __construct($args = [])!?
+  $item = new Fruit($args);
+  $result = $item->save();
 
   if ($result === true) {
-    $_SESSION['message'] = "Item added successfully";
-    redirect(url_for("/user_admin/items/show.php?id=" . $item["v_id"]));
+    // id created in crud class
+    $new_id = $item->getId();
+    $_SESSION['message'] = "Item saved successfully";
+    // $session->message("Item added successfully");
+    redirect(url_for("/user_admin/items/show.php?id=" . $new_id));
   } else {
-    $errors = $result;
-    // var_dump($errors);
+    //show errors
   }
 } else {
   // display blank form:
-  $item = [];
-  $item["f_name"] = "";
-  $item["f_season"] = "";
-  $item["v_id"] = "";
-  $item["b_date"] = "";
-  $item["b_price"] = "";
-  $item["b_quantity"] = "";
-  $item["s_price"] = "";
+  $item = new Fruit;
 }
 ;
 
@@ -53,49 +42,9 @@ include SHARED_PATH . '/admin_header.php';
 <div class="subject new">
 
   <form action="<?php echo url_for("/user_admin/items/new.php"); ?>" method="post">
-    <dl>
-      <dt>Fruit Name</dt>
-      <dd><input type="text" name="f_name" value="" /></dd>
-    </dl>
-    <dl>
-      <dt>Season</dt>
-      <dd>
-        <select name="f_season">
-            <option value="all">All</option>
-            <option value="spring">Spring</option>
-            <option value="summer">Summer</option>
-            <option value="autumn">Autumn</option>
-            <option value="winter">Winter</option>
-        </select>
-      </dd>
-    </dl>
-    <dl>
-      <dt>Vendor</dt>
-      <dd>
-        <select name="v_id">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-        </select>
-      </dd>
-    </dl>
-    <dl>
-      <dt>Buying Date</dt>
-      <dd><input type="date" name="b_date" value="" /></dd>
-    </dl>
-    <dl>
-      <dt>Buying Price</dt>
-      <dd><input type="number" name="b_price" step="0.01" min="0" value="" /></dd>
-    </dl>
-    <dl>
-      <dt>Buying Quantity</dt>
-      <dd><input type="number" name="b_quantity" step="0.01" min="0" value="" /></dd>
-    </dl>
-    <dl>
-      <dt>Selling Price</dt>
-      <dd><input type="number" name="s_price" step="0.01" min="0" value="" /></dd>
-    </dl>
-    </dl>
+
+  <?php include ('item_form.php'); ?>
+
     <div id="operations">
       <input type="submit" value="Add Fruit" />
     </div>
@@ -104,4 +53,4 @@ include SHARED_PATH . '/admin_header.php';
 </div>
 
 </div>
-<?php include(SHARED_PATH . '/admin_footer.php');?>
+<?php include (SHARED_PATH . '/admin_footer.php'); ?>

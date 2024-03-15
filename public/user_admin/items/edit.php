@@ -53,6 +53,9 @@ include SHARED_PATH . '/admin_header.php';
 <div class="subject new">
 
   <form action="<?php echo url_for("/user_admin/items/edit.php?id=" . u($id)); ?>" method="post">
+
+  <?php include ('item_form.php'); ?>
+  
     <dl>
       <dt>Fruit Name</dt>
       <dd><input type="text" name="f_name" value="<?php echo h($this_item["f_name"]) ?>" /></dd>

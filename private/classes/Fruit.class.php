@@ -29,15 +29,37 @@ class Fruit extends Crud
         $object->b_price = (float) ($record['b_price'] ?? 0);
         $object->b_quantity = $record['b_quantity'] ?? '';
         $object->s_price = (float) ($record['s_price'] ?? 0);
-        $object->s_profit = self::set_profit($object->s_price, $object->b_price);
+        $object->s_profit = $record['s_profit'];
         return $object;
     }
 
-
-    static protected function set_profit($sp, $bp)
+    public function getId() {
+        return $this->id;
+    }
+    protected function create()
     {
-        return round(($sp - $bp) / $sp * 100, 2);
+        // Calculate profit before calling parent create method
+        $this->set_profit();
+        return parent::create();
+    }
+    protected function set_profit()
+    {
+        $sp = $this->s_price;
+        $bp = $this->b_price;
+        $this->s_profit = round(($sp - $bp) / $sp * 100, 2);
+        return $this->s_profit;
+    }
 
+    // This is what we'll use to take the values in from the forms
+    public function __construct($args = [])
+    {
+        $this->f_name = $args['f_name'] ?? '';
+        $this->f_season = $args['f_season'] ?? '';
+        $this->v_id = $args['v_id'] ?? '';
+        $this->b_date = $args['b_date'] ?? '';
+        $this->b_price = $args['b_price'] ?? '';
+        $this->b_quantity = $args['b_quantity'] ?? '';
+        $this->s_price = $args['s_price'] ?? '';
     }
     protected function validate()
     {
