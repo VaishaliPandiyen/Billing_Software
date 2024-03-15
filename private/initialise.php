@@ -40,7 +40,7 @@ foreach (glob("classes/*.class.php") as $f) {
 function my_autoload($class)
 {
     if (preg_match('/\A\w+\Z/', $class)) {
-        include('classes/' . $class . "class.php");
+        include('classes/' . $class . ".class.php");
     }
 }
 spl_autoload_register("my_autoload");
@@ -49,5 +49,3 @@ spl_autoload_register("my_autoload");
 
 
 require_once("database.php");
-$db = db_connect();
-// closing the connection happens in the admin_footer.php file

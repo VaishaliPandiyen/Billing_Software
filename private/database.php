@@ -45,3 +45,6 @@ function esc($db, $str)
     // this is used to escape SQL injection (like HTML escaping)
     return $db->escape_string($str);
 }
+$db = db_connect();
+Fruit::set_db($db);
+// closing the connection happens in the admin_footer.php file

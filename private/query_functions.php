@@ -122,7 +122,7 @@ function find_user_by_username($un)
 
     $r = $db->query($sql);
     confirm_results($r);
-    
+
     $u = $r->fetch_assoc(); // find first
     $r->free();
     return $u; // returns an assoc. array
@@ -464,7 +464,7 @@ function delete_item($id)
 
     if ($result) {
         return true;
-    } else { 
+    } else {
         echo $db->error;
         db_disconnect($db);
         exit;
@@ -489,8 +489,8 @@ function delete_user($id)
     }
 }
 
-function per_item_profit($i)
+function per_item_profit($fruit)
 {
-    return round(($i['s_price'] - $i['b_price']) / ($i['s_price']) * 100, 2);
+    // Calculate profit based on the properties of the Fruit object
+    return $fruit->b_price - $fruit->s_price;
 }
-;

@@ -1,6 +1,6 @@
 <?php require_once("../../../private/initialise.php");
 
-$items = all_items();
+$fruits = Fruit::find_all();
 
 $page_title = "Items";
 include(SHARED_PATH . "/admin_header.php");
@@ -39,30 +39,24 @@ include(SHARED_PATH . "/admin_header.php");
         <th>&nbsp;</th>
       </tr>
 
-      <?php if ($items) {
-        while ($i = $items->fetch_assoc()) {
+      <?php foreach($fruits as $f) {
       ?>
         <tr>
-          <td><?php echo h($i['f_id']); ?></td>
-          <td><?php echo h($i['f_name']); ?></td>
-          <td><?php echo h($i['f_season']); ?></td> 
-          <td><a class="action" href="<?php echo url_for("/user_admin/vendors/show.php?id=" . h(u($i['v_id']))); ?>">
-          <?php echo h($i['v_id']) ?></a></td>
-          <td><?php echo h($i['b_date']); ?></td>
-          <td><?php echo '&pound;' . h($i['b_price']); ?></td>
-          <td><?php echo h($i['b_quantity']) . 'kg'; ?></td>
-          <td><?php echo '&pound;' . h($i['s_price']); ?></td>
-          <td><?php echo per_item_profit($i); ?></td>
-          <td><a class="action" href="<?php echo url_for("/user_admin/items/show.php?id=" . h(u($i['f_id']))); ?>">View</a></td>
-          <td><a class="action" href="<?php echo url_for("/user_admin/items/edit.php?id=" . h(u($i['f_id']))); ?>">Edit</a></td>
-          <td><a class="action" href="<?php echo url_for("/user_admin/items/delete.php?id=" . h(u($i['f_id']))); ?>">Delete</a></td>
+          <td><?php echo h($f->f_id); ?></td>
+          <td><?php echo h($f->f_name); ?></td>
+          <td><?php echo h($f->f_season); ?></td> 
+          <td><a class="action" href="<?php echo url_for("/user_admin/vendors/show.php?id=" . h(u($f->v_id))); ?>">
+          <?php echo h($f->v_id) ?></a></td>
+          <td><?php echo h($f->b_date); ?></td>
+          <td><?php echo '&pound;' . h($f->b_price); ?></td>
+          <td><?php echo h($f->b_quantity) . 'kg'; ?></td>
+          <td><?php echo '&pound;' . h($f->s_price); ?></td>
+          <td><?php echo h($f->s_profit); ?></td>
+          <td><a class="action" href="<?php echo url_for("/user_admin/items/show.php?id=" . h(u($f->f_id))); ?>">View</a></td>
+          <td><a class="action" href="<?php echo url_for("/user_admin/items/edit.php?id=" . h(u($f->f_id))); ?>">Edit</a></td>
+          <td><a class="action" href="<?php echo url_for("/user_admin/items/delete.php?id=" . h(u($f->f_id))); ?>">Delete</a></td>
         </tr>
-      <?php 
-    }
-      } else {
-        echo "Error: " . $db->error;
-      }
-      ?>
+      <?php } ?>
     </table>
 
   </div>
