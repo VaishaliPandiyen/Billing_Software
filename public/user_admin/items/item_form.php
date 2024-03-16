@@ -26,16 +26,17 @@ if(!isset($item)) {
   <dt>Vendor</dt>
   <dd>
     <select name="item[v_id]">
-        <option value="1" <?php if($item->v_id == 1) { echo 'selected'; } ?>>1</option>
-        <option value="2" <?php if($item->v_id == 2) { echo 'selected'; } ?>>2</option>
-        <option value="3" <?php if($item->v_id == 3) { echo 'selected'; } ?>>3</option>
+    <?php $vi = [1,2,3];
+    foreach($vi as $v) { ?>
+        <option value="<?php echo $v?>" <?php if($item->v_id == $v) { echo 'selected'; } ?>><?php echo $v?></option>
+    <?php } ?>
     </select>
   </dd>  
 </dl>
 
 <dl>
     <dt>Buying Date</dt>
-    <dd><input type="date" name="item[b_date]" value="<?php echo date('Y-m-d'); ?>" /></dd>
+    <dd><input type="date" name="item[b_date]" value="<?php echo h($item->b_date); ?>" /></dd>
 </dl>
 
 <dl>

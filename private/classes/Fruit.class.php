@@ -26,9 +26,9 @@ class Fruit extends Crud
         $object->f_season = $record['f_season'] ?? '';
         $object->v_id = $record['v_id'] ?? '';
         $object->b_date = $record['b_date'] ?? '';
-        $object->b_price = (float) ($record['b_price'] ?? 0);
+        $object->b_price = $record['b_price'] ?? 0;
         $object->b_quantity = $record['b_quantity'] ?? '';
-        $object->s_price = (float) ($record['s_price'] ?? 0);
+        $object->s_price = $record['s_price'] ?? 0;
         $object->s_profit = $record['s_profit'];
         return $object;
     }
@@ -41,6 +41,11 @@ class Fruit extends Crud
         // Calculate profit before calling parent create method
         $this->set_profit();
         return parent::create();
+    }
+    protected function update()
+    {
+        $this->set_profit();
+        return parent::update();
     }
     protected function set_profit()
     {

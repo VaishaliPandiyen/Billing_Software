@@ -5,37 +5,33 @@
 
 // Check this out for adding selectors for seasons: https://www.linkedin.com/learning/php-with-mysql-essential-training-1-the-basics/form-options-from-database-data-14185925?contextUrn=urn%3Ali%3AlyndaLearningPath%3A57bdd8a292015ae4c0cb990f&resume=false
 
-require_once('../../../private/initialise.php');
+require_once ('../../../private/initialise.php');
 
-if (!isset($_GET['id'])) {
-    redirect(url_for('/user_admin/items/index.php'));
+if (!isset ($_GET['id'])) {
+  redirect(url_for('/user_admin/items/index.php'));
 }
 $id = $_GET['id'];
 
-if (is_post()) {
-    $item = [];
-    $item["f_id"] = $id;
-
-    $item["f_name"] = $_POST["f_name"] ?? "";
-    $item["f_season"] = $_POST["f_season"] ?? "";
-    $item["v_id"] = $_POST["v_id"] ?? "";
-    $item["b_date"] = $_POST["b_date"] ?? "";
-    $item["b_price"] = $_POST["b_price"] ?? "";
-    $item["b_quantity"] = $_POST["b_quantity"] ?? "";
-    $item["s_price"] = $_POST["s_price"] ?? "";
-
-    $result = edit_item($item);
-
-    if ($result === true) {
-        $_SESSION['message'] = "Item updated successfully";
-        redirect(url_for("/user_admin/items/show.php?id=" . $item["v_id"]));
-    } else {
-        $errors = $result;
-        // var_dump($errors);
-    }
-} else {
-    $this_item = find_item($id);
+$item = Fruit::find_one($id);
+if ($item == false) {
+  redirect(url_for('/user_admin/items/index.php'));
 }
+
+if (is_post()) {
+  $args = $_POST['item'];
+  //need this bit for save() to update instead of create! notice this $args["id"] is passed in from get request for a condition in save(), not put request f_id or it's refrence!
+  $args['id'] = $id;
+  $item->merge_attributes($args);
+  $result = $item->save();
+
+  if ($result === true) {
+    $_SESSION['message'] = "Item updated successfully";
+    // $session->message('Item was updated successfully.');
+    redirect(url_for("/user_admin/items/show.php?id=" . $id));
+  } else {
+    // errors
+  }
+} 
 ;
 
 /* 
@@ -47,72 +43,17 @@ $page_title = 'Edit Item';
 include SHARED_PATH . '/admin_header.php';
 ?>
 <div id="content">
+  <a class="back-link" href="<?php echo url_for('/user_admin/items/index.php'); ?>">&laquo; Back to items</a>
 
-<a class="back-link" href="<?php echo url_for('/user_admin/items/index.php'); ?>">&laquo; Back to items</a>
+  <div class="subject new">
+    <form action="<?php echo url_for("/user_admin/items/edit.php?id=" . u($id)); ?>" method="post">
 
-<div class="subject new">
-
-  <form action="<?php echo url_for("/user_admin/items/edit.php?id=" . u($id)); ?>" method="post">
-
-  <?php include ('item_form.php'); ?>
-  
-    <dl>
-      <dt>Fruit Name</dt>
-      <dd><input type="text" name="f_name" value="<?php echo h($this_item["f_name"]) ?>" /></dd>
-    </dl>
-    <dl>
-      <dt>Season</dt>
-      <dd>
-        <select name="f_season" value="<?php echo h($this_item["f_season"]) ?>">
-        <?php
-            $seasons = ["all", "spring", "summer", "autumn", "winter"];
-            foreach ($seasons as $season) {
-                $selected = ($this_item["f_season"] === $season) ? " selected" : "";
-                echo "<option value=\"$season\" $selected>$season</option>";
-            }
-            ?>
-        </select>
-      </dd>
-    </dl>
-    <dl>
-      <dt>Vendor</dt>
-      <dd>
-        <select name="v_id" value="<?php echo h($this_item["v_id"]) ?>">
-        <?php
-            // TODO Get this from vendors db
-            // TODO DEBUG this! 
-            $vendor_ids = [1, 2, 3];
-            foreach ($vendor_ids as $vendor_id) {
-                $selected = ($this_item["v_id"] === $vendor_id) ? " selected" : "";
-                echo "<option value=\"$vendor_id\" $selected>$vendor_id</option>";
-            }
-            ?>
-        </select>
-      </dd>
-    </dl>
-    <dl>
-      <dt>Buying Date</dt>
-      <dd><input type="date" name="b_date" value="<?php echo h($this_item["b_date"]) ?>" /></dd>
-    </dl>
-    <dl>
-      <dt>Buying Price</dt>
-      <dd><input type="number" name="b_price" step="0.01" min="0" value="<?php echo h($this_item["b_price"]) ?>" /></dd>
-    </dl>
-    <dl>
-      <dt>Buying Quantity</dt>
-      <dd><input type="number" name="b_quantity" step="0.01" min="0" value="<?php echo h($this_item["b_quantity"]) ?>" /></dd>
-    </dl>
-    <dl>
-      <dt>Selling Price</dt>
-      <dd><input type="number" name="s_price" step="0.01" min="0" value="<?php echo h($this_item["s_price"]) ?>" /></dd>
-    </dl>
-    </dl>
+    <?php include ('item_form.php'); ?>
+    
     <div id="operations">
       <input type="submit" value="Save Edit" />
     </div>
-  </form>
-
+    </form>
+  </div>
 </div>
-
-</div>
-<?php include(SHARED_PATH . '/admin_footer.php');?>
+<?php include (SHARED_PATH . '/admin_footer.php'); ?>

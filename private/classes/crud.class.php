@@ -77,6 +77,7 @@ abstract class Crud
         $sql .= ") VALUES ('";
         $sql .= join("', '", array_values($attributes));
         $sql .= "')";
+        echo $sql;
         $result = self::$db->query($sql);
         if ($result) {
             static::$id = self::$db->insert_id;
@@ -108,14 +109,15 @@ abstract class Crud
 
     public function save()
     {
-        // A new record will not have an ID yet
         if (isset($this->id)) {
-            echo "Editing record";
+            return $this->update();
         } else {
+            // A new record will not have an ID yet
             return $this->create();
         }
     }
 
+    // to update the existing value with form values:
     public function merge_attributes($args = [])
     {
         foreach ($args as $key => $value) {
@@ -155,7 +157,7 @@ abstract class Crud
     public function delete()
     {
         $sql = "DELETE FROM " . static::$table_name . " ";
-        $sql .= "WHERE " . static::$id . "='" . self::$db->escape_string($this->id) . "' ";
+        $sql .= "WHERE " . static::$id . "='" . self::$db->escape_string(static::$id) . "' ";
         $sql .= "LIMIT 1";
         $result = self::$db->query($sql);
         return $result;

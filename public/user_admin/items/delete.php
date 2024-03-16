@@ -11,15 +11,16 @@ if (!isset($_GET['id'])) {
 }
 $id = $_GET['id'];
 
+$item = Fruit::find_one($id);
+if($item == false) {
+  redirect(url_for('/user_admin/items/index.php'));
+}
+
 if (is_post()) {
-  $result = delete_item($id);
+  $result = $item->delete();
   $_SESSION['message'] = "Item deleted successfully";
   redirect(url_for('/user_admin/items/index.php'));
-
-} else {
-  $item = find_item($id);
-}
-;
+} 
 ?>
 <?php $page_title = 'Delete Item'; ?>
 <?php include(SHARED_PATH . '/admin_header.php'); ?>
@@ -30,9 +31,9 @@ if (is_post()) {
 
   <div class="subject delete">
     <p>Are you sure you want to delete this item?</p>
-    <p class="item"><?php echo h($item['f_name']); ?></p>
+    <p class="item"><?php echo h($item->f_name); ?></p>
 
-    <form action="<?php echo url_for('/user_admin/items/delete.php?id=' . h(u($item['f_id']))); ?>" method="post">
+    <form action="<?php echo url_for('/user_admin/items/delete.php?id=' . h(u($item->f_id))); ?>" method="post">
       <div id="operations">
         <input type="submit" name="commit" value="Delete" />
       </div>

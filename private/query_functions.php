@@ -368,6 +368,7 @@ function edit_vendor($vendor)
 
 function edit_item($item)
 {
+    echo "Edit item";
     global $db;
 
     $errors = validate_item($item);
