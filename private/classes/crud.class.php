@@ -1,6 +1,6 @@
 <?php
 
-abstract class Crud
+class Crud
 {
     static protected $db;
     static protected $table_name = "";
@@ -18,7 +18,7 @@ abstract class Crud
         $result = self::$db->query($sql);
         $object_array = [];
         if (!$result) {
-            exit("Database query failed.");
+            exit ("Database query failed.");
         }
         $instance = new static(); //  creates an instance of the child class dynamically to call the child's instantiate method 
         while ($record = $result->fetch_assoc()) {
@@ -47,26 +47,37 @@ abstract class Crud
         $sql = "SELECT * FROM " . static::$table_name . " ";
         $sql .= "WHERE " . static::$id . "='" . self::$db->escape_string($id) . "'";
         $obj_array = static::find_sql($sql);
-        if (!empty($obj_array)) {
+        if (!empty ($obj_array)) {
             return array_shift($obj_array);
         } else {
             return false;
         }
     }
 
-    abstract protected function instantiate($record);
+    protected function instantiate($record)
+    {
+        $class_name = get_called_class(); // Get the name of the child class
+        $object = new $class_name; // Instantiate the child class. 
+        // If we did $object = new static instead, instantiate() being called from the parent class will search for $property in the parent scope when they are defined in the child class! (ex: f_name)
+        foreach ($record as $property => $value) {
+            if (property_exists($object, $property)) {
+                $object->$property = $value;
+            }
+        }
+        return $object;
+    }    
 
-    abstract protected function validate();
-    // {
-    //     $this->errors = [];
-    //     // SPACE FOR CUSTOM VALIDATIONS
-    //     return $this->errors;
-    // }
+    protected function validate()
+    {
+        $this->errors = [];
+        // SPACE FOR CUSTOM VALIDATIONS
+        return $this->errors;
+    }
 
     protected function create()
     {
         $this->validate();
-        if (!empty($this->errors)) {
+        if (!empty ($this->errors)) {
             return false;
         }
 
@@ -89,7 +100,7 @@ abstract class Crud
     protected function update()
     {
         $this->validate();
-        if (!empty($this->errors)) {
+        if (!empty ($this->errors)) {
             return false;
         }
 
@@ -109,7 +120,7 @@ abstract class Crud
 
     public function save()
     {
-        if (isset($this->id)) {
+        if (isset ($this->id)) {
             return $this->update();
         } else {
             // A new record will not have an ID yet
@@ -154,11 +165,12 @@ abstract class Crud
         return $sanitized;
     }
 
-    public function delete()
+    public function delete($d_id)
     {
         $sql = "DELETE FROM " . static::$table_name . " ";
-        $sql .= "WHERE " . static::$id . "='" . self::$db->escape_string(static::$id) . "' ";
+        $sql .= "WHERE " . static::$id . "='" . self::$db->escape_string($d_id) . "' ";
         $sql .= "LIMIT 1";
+        echo $sql;
         $result = self::$db->query($sql);
         return $result;
 

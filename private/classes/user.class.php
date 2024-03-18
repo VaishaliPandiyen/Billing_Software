@@ -17,6 +17,7 @@ class User extends Crud {
   protected $password_required = true;
 
   public function __construct($args=[]) {
+    $this->id;
     $this->first_name = $args['first_name'] ?? '';
     $this->last_name = $args['last_name'] ?? '';
     $this->email = $args['email'] ?? '';
@@ -120,7 +121,4 @@ class User extends Crud {
       return false;
     }
   }
-
-   protected function instantiate($record){}
-
 }

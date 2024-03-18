@@ -17,7 +17,7 @@ if($item == false) {
 }
 
 if (is_post()) {
-  $result = $item->delete();
+  $result = $item->delete($id);
   $_SESSION['message'] = "Item deleted successfully";
   redirect(url_for('/user_admin/items/index.php'));
 } 
@@ -33,7 +33,7 @@ if (is_post()) {
     <p>Are you sure you want to delete this item?</p>
     <p class="item"><?php echo h($item->f_name); ?></p>
 
-    <form action="<?php echo url_for('/user_admin/items/delete.php?id=' . h(u($item->f_id))); ?>" method="post">
+    <form action="<?php echo url_for('/user_admin/items/delete.php?id=' . h(u($id))); ?>" method="post">
       <div id="operations">
         <input type="submit" name="commit" value="Delete" />
       </div>
