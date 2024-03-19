@@ -1,28 +1,30 @@
-<?php require_once("../../../private/initialise.php");
+<?php require_once ("../../../private/initialise.php");
+
 
 if (is_post()) {
-  $vendor = [];
-  // $vendor["v_name"] = isset($_POST["v_name"]) ? $_POST["v_name"] : "";
-  $vendor["v_name"] = $_POST["v_name"] ?? "";
-
-  $result = add_vendor($vendor);
+  //  $_POST["vendor"] has data from form fields with name="vendor[x]" instead of writing $args['x'] = $_POST['x'] ?? NULL;
+  $args = $_POST['vendor'];
+  // Remember __construct($args = [])!?
+  $vendor = new Vendor($args);
+  $result = $vendor->save();
 
   if ($result === true) {
-    $_SESSION['message'] = "Vendor added successfully";
-    redirect(url_for("/user_admin/vendors/show.php?id=" . $vendor["v_id"]));
+    // id created in crud class
+    $new_id = $vendor->getId();
+    $_SESSION['message'] = "Vendor saved successfully";
+    // $session->message("Vendor added successfully");
+    redirect(url_for("/user_admin/vendor/show.php?id=" . $new_id));
   } else {
-    $errors = $result;
-    // var_dump($errors);
+    //show errors
   }
 } else {
   // display blank form:
-  $vendor = [];
-  $vendor["v_name"] = "";
+  $vendor = new Vendor;
 }
 ;
 
 $page_title = 'Add Vendor';
-include(SHARED_PATH . '/admin_header.php');
+include (SHARED_PATH . '/admin_header.php');
 ?>
 <div id="content">
 
@@ -31,11 +33,8 @@ include(SHARED_PATH . '/admin_header.php');
   <div class="subject new">
 
     <form action="<?php echo url_for("/user_admin/vendors/new.php"); ?>" method="post">
-      <dl>
-        <dt>Vendor Name</dt>
-        <dd><input type="text" name="v_name" value="<?php echo h($vendor["v_name"])?>" /></dd>
-      </dl>
-      </dl>
+
+    <?php include ('vendor_form.php'); ?>
       <div id="operations">
         <input type="submit" value="Add Vendor" />
       </div>
@@ -44,4 +43,4 @@ include(SHARED_PATH . '/admin_header.php');
   </div>
 
 </div>
-<?php include(SHARED_PATH . '/admin_footer.php');?>
+<?php include (SHARED_PATH . '/admin_footer.php'); ?>

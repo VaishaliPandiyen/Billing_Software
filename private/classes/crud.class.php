@@ -13,6 +13,11 @@ class Crud
         self::$db = $db;
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
     static protected function find_sql($sql)
     {
         $result = self::$db->query($sql);

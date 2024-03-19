@@ -17,10 +17,6 @@ class Fruit extends Crud
 
     public const SEASONS = ['All', 'Spring', 'Summer', 'Autumn', 'Winter'];
 
-    public function getId()
-    {
-        return $this->id;
-    }
     protected function create()
     {
         // Calculate profit before calling parent create method
@@ -38,16 +34,6 @@ class Fruit extends Crud
         $bp = $this->b_price;
         $this->s_profit = round(($sp - $bp) / $sp * 100, 2);
         return $this->s_profit;
-    }
-
-    protected function instantiate($record)
-    {
-        //     foreach ($record as $property => $value) {
-        //         if (property_exists($object, $property)) {
-        //             $object->$property = $value;
-        //         }
-        //     }
-        return parent::instantiate($record);
     }
 
     // This is what we'll use to take the values in from the forms

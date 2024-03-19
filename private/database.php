@@ -47,4 +47,5 @@ function esc($db, $str)
 }
 $db = db_connect();
 Fruit::set_db($db);
+Vendor::set_db($db);
 // closing the connection happens in the admin_footer.php file
