@@ -11,7 +11,7 @@ if (is_post()) {
   if ($result === true) {
     // id created in crud class
     $new_id = $vendor->getId();
-    $_SESSION['message'] = "Vendor saved successfully";
+    $_SESSION['message'] = "Vendor saved successfully"; 
     // $session->message("Vendor added successfully");
     redirect(url_for("/user_admin/vendor/show.php?id=" . $new_id));
   } else {
