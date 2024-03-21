@@ -7,21 +7,25 @@ if(!isset($_GET['id'])) {
 }
 $id = $_GET['id'];
 
-if (is_post()) {
-  $vendor = [];
-  $vendor["v_id"] = $id; 
-  $vendor["v_name"] = $_POST['vendor_name'] ?? '';
+$vendor = Vendor::find_one($id);
+if ($vendor == false) {
+  redirect(url_for('/user_admin/vendors/index.php'));
+}
 
-  $result = edit_vendor($vendor);
+if (is_post()) {
+  $args = $_POST['vendor'];
+  //need this bit for save() to update instead of create! notice this $args["id"] is passed in from get request for a condition in save(), not put request f_id or it's refrence!
+  $args['id'] = $id;
+  $vendor->merge_attributes($args);
+  $result = $vendor->save();
 
   if ($result === true) {
     $_SESSION['message'] = "Vendor updated successfully";
-    redirect(url_for("/user_admin/vendors/show.php?id=". $id));
+    // $session->message('Vendor was updated successfully.');
+    redirect(url_for("/user_admin/vendors/show.php?id=" . $id));
   } else {
-    $errors = $result;
-    // var_dump($errors);
+    // errors
   }
-
 } else {
   $this_vendor = find_vendor($id);
 }
@@ -37,11 +41,9 @@ include(SHARED_PATH . '/admin_header.php'); ?>
   <div class="subject new">
  
     <form action="<?php echo url_for("/user_admin/vendors/edit.php?id=" . u($id));?>" method="post">
-      <dl>
-        <dt>Vendor Name</dt>
-        <dd><input type="text" name="vendor_name" value="<?php echo h($this_vendor["v_name"]) ?>" /></dd>
-      </dl>
-      </dl>
+    
+    <?php include ('vendor_form.php'); ?>
+
       <div id="operations">
         <input type="submit" value="Save Edit" />
       </div>

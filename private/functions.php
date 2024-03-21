@@ -28,7 +28,7 @@ function ru($string = "")
 // this shortcut for htmlspecialchars is used to escape special characters and prevent XSS attacks
 function h($string = "")
 {
-    return htmlspecialchars($string);
+    return htmlspecialchars($string??"");
 }
 
 /* 

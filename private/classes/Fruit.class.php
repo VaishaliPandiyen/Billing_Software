@@ -39,7 +39,7 @@ class Fruit extends Crud
     // This is what we'll use to take the values in from the forms
     public function __construct($args = [])
     {
-        $this->f_id = $this->id;
+        $this->f_id = static::$id;
         $this->f_name = $args['f_name'] ?? '';
         $this->f_season = $args['f_season'] ?? '';
         $this->v_id = $args['v_id'] ?? '';

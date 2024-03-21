@@ -19,15 +19,17 @@ if (!isset($_GET['id'])) {
 }
 $id = $_GET['id'];
 
+$vendor = Vendor::find_one($id);
+if($vendor == false) {
+  redirect(url_for('/user_admin/vendors/index.php'));
+}
+
 if (is_post()) {
-  $result = delete_vendor($id);
+  $result = $vendor->delete($id);
   $_SESSION['message'] = "Vendor deleted successfully";
   redirect(url_for('/user_admin/vendors/index.php'));
 
-} else {
-  $vendor = find_vendor($id);
 }
-;
 ?>
 <?php $page_title = 'Delete Vendor'; ?>
 <?php include(SHARED_PATH . '/admin_header.php'); ?>
@@ -38,9 +40,9 @@ if (is_post()) {
 
   <div class="subject delete">
     <p>Are you sure you want to delete this vendor?</p>
-    <p class="item"><?php echo h($vendor['v_name']); ?></p>
+    <p class="item"><?php echo h($vendor->v_name); ?></p>
 
-    <form action="<?php echo url_for('/user_admin/vendors/delete.php?id=' . h(u($vendor['v_id']))); ?>" method="post">
+    <form action="<?php echo url_for('/user_admin/vendors/delete.php?id=' . h(u($id))); ?>" method="post">
       <div id="operations">
         <input type="submit" name="commit" value="Delete" />
       </div>

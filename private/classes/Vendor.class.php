@@ -6,12 +6,11 @@ class Vendor extends Crud
     static protected $db_columns = ['v_id', 'v_name'];
 
     static protected $id = 'v_id';
-
     public $v_name;
 
     public function __construct($args = [])
     {
-        $this->v_id = $this->id;
+        $this->v_id = static::$id;
         $this->v_name = $args['v_name'] ?? '';
     }
     protected function validate()

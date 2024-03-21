@@ -15,7 +15,7 @@ class Crud
 
     public function getId()
     {
-        return $this->id;
+        return static::$id;
     }
 
     static protected function find_sql($sql)

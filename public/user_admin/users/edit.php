@@ -1,38 +1,36 @@
 <?php
 
-require_once('../../../private/initialise.php');
+require_once ('../../../private/initialise.php');
 
-if(!isset($_GET['id'])) {
-    redirect(url_for('/user_admin/users/index.php'));
-  }
+if (!isset ($_GET['id'])) {
+  redirect(url_for('/user_admin/users/index.php'));
+}
 $id = $_GET['id'];
 
-if(is_post()) {
-  $user = [];
-  $user['first_name'] = $_POST['first_name'] ?? '';
-  $user['last_name'] = $_POST['last_name'] ?? '';
-  $user['email'] = $_POST['email'] ?? '';
-  $user['username'] = $_POST['username'] ?? '';
-  $user['password'] = $_POST['password'] ?? '';
-  $user['user_type'] = $_POST['user_type'] ?? '';
-  $user['confirm_password'] = $_POST['confirm_password'] ?? '';
+$user = User::find_one($id);
+if ($user == false) {
+  redirect(url_for('/staff/users/index.php'));
+}
 
-  $result = edit_user($user);
-  if($result === true) {
+if (is_post()) {
+  $args = $_POST['user'];
+  //need this bit for save() to update instead of create! notice this $args["id"] is passed in from get request for a condition in save(), not put request f_id or it's refrence!
+  $args['id'] = $id;
+  $user->merge_attributes($args);
+  $result = $user->save();
+
+  if ($result === true) {
     $_SESSION['message'] = 'User updated.';
     redirect(url_for('/user_admin/users/index.php'));
   } else {
-    $errors = $result;
+    // error
   }
-
-} else {
-    $user = find_user($id);
 }
 
 ?>
 
 <?php $page_title = 'Edit User'; ?>
-<?php include(SHARED_PATH . '/admin_header.php'); ?>
+<?php include (SHARED_PATH . '/admin_header.php'); ?>
 
 <div id="content">
 
@@ -41,49 +39,9 @@ if(is_post()) {
   <div class="admin new">
     <h1>Edit User</h1>
 
-    <form action="<?php echo url_for('/user_admin/users/edit.php'. h(u($id))); ?>" method="post">
-      <dl>
-        <dt>First name</dt>
-        <dd><input type="text" name="first_name" value="<?php echo h($user['first_name']); ?>" /></dd>
-      </dl>
+    <form action="<?php echo url_for('/user_admin/users/edit.php?id=' . h(u($id))); ?>" method="post">
 
-      <dl>
-        <dt>Last name</dt>
-        <dd><input type="text" name="last_name" value="<?php echo h($user['last_name']); ?>" /></dd>
-      </dl>
-
-      <dl>
-        <dt>Email </dt>
-        <dd><input type="text" name="email" value="<?php echo h($user['email']); ?>" /><br /></dd>
-      </dl>
-
-      <dl>
-        <dt>Username</dt>
-        <dd><input type="text" name="username" value="<?php echo h($user['username']); ?>" /></dd>
-      </dl>
-
-      <dl>
-        <dt>User Type</dt>
-        <dd>
-            <select name="user_type">
-                <option value="admin">Admin</option>
-                <option value="staff">Staff</option>
-            </select>
-        </dd>
-      </dl>
-      
-      <dl>
-        <dt>Password</dt>
-        <dd><input type="password" name="password" value="" /></dd>
-      </dl>
-
-      <dl>
-        <dt>Confirm Password</dt>
-        <dd><input type="password" name="confirm_password" value="" /></dd>
-      </dl>
-      <p>
-        Passwords should be at least 12 characters and include at least one uppercase letter, lowercase letter, number, and symbol.
-      </p>
+      <?php include ('user_form.php'); ?>
 
       <div id="operations">
         <input type="submit" value="Save Edit" />
@@ -94,4 +52,4 @@ if(is_post()) {
 
 </div>
 
-<?php include(SHARED_PATH . '/admin_footer.php'); ?>
+<?php include (SHARED_PATH . '/admin_footer.php'); ?>

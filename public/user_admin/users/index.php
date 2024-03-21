@@ -1,7 +1,7 @@
 <?php 
 require_once('../../../private/initialise.php');
 
-$users = all_users();
+$user = User::find_all();
 
 $page_title = "Admins & Staff";
 include(SHARED_PATH . '/admin_header.php');
@@ -21,21 +21,17 @@ include(SHARED_PATH . '/admin_header.php');
         </tr>
 
       <?php 
-      if ($users) { 
-        while ($u = $users->fetch_assoc()) { 
+      foreach($user as $u){
       ?>
         <tr>
-          <td><?php echo h($u['id']); ?></td>
-          <td><?php echo h($u['first_name'])." ".h($u['last_name']); ?></td>
-          <td><?php echo h($u['user_type']); ?></td>
-          <td><?php echo h($u['email']); ?></td>
-          <td><a class="action" href="<?php echo url_for("/user_admin/users/edit.php?id=" . h(u($u['id']))); ?>">Edit</a></td>
-          <td><a class="action" href="<?php echo url_for("/user_admin/users/delete.php?id=" . h(u($u['id']))); ?>">Delete</a></td>
+          <td><?php echo h($u->u_id); ?></td>
+          <td><?php echo h($u->first_name)." ".h($u->last_name); ?></td>
+          <td><?php echo h($u->user_type); ?></td>
+          <td><?php echo h($u->email); ?></td>
+          <td><a class="action" href="<?php echo url_for("/user_admin/users/edit.php?id=" . h(u($u->u_id))); ?>">Edit</a></td>
+          <td><a class="action" href="<?php echo url_for("/user_admin/users/delete.php?id=" . h(u($u->u_id))); ?>">Delete</a></td>
           </tr>
-      <?php } 
-      } else {
-        echo "Error: " . $db->error;
-      } ?>
+      <?php } ?>
       </table>
 </div>
 <?php 

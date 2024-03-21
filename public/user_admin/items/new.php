@@ -28,8 +28,8 @@ if (is_post()) {
 ;
 
 /* 
-WRITE code for dropdowns here 
-If you write it inside if(is_post()), the values will load only when the page is initialised, not when the user clicks submit and waits to rectify errors. Ref: https://www.linkedin.com/learning/php-with-mysql-essential-training-1-the-basics/display-validation-errors-14187614?contextUrn=urn%3Ali%3AlyndaLearningPath%3A57bdd8a292015ae4c0cb990f&resume=false 
+If you write code for dropdowns inside if(is_post()), the values will load only when the page is initialised, not when the user clicks submit and waits to rectify errors.
+So, write them after is_post() is called.
 */
 
 $page_title = 'Add Item';

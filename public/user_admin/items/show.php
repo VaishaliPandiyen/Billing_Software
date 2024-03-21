@@ -1,9 +1,8 @@
 <?php require_once("../../../private/initialise.php");
 
-/*  This is the id="" in this url: 
-href="<?php echo url_for("/user_admin/vendors/show.php?id=" . $v['v_id']); back in the vendors index page*/
+// This is the id="" in this url: 
 $id = $_GET['id'] ?? null;
-// This null coalesescing operator works as a ternary operator in PHP > 7.0
+
 if (!$id) {
     redirect(url_for("/user_admin/items/index.php"));
 }

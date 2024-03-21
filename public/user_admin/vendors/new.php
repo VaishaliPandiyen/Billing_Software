@@ -4,16 +4,18 @@
 if (is_post()) {
   //  $_POST["vendor"] has data from form fields with name="vendor[x]" instead of writing $args['x'] = $_POST['x'] ?? NULL;
   $args = $_POST['vendor'];
+  var_dump( "Args: ".$args);
   // Remember __construct($args = [])!?
   $vendor = new Vendor($args);
   $result = $vendor->save();
 
   if ($result === true) {
+    echo "Result true";
     // id created in crud class
     $new_id = $vendor->getId();
     $_SESSION['message'] = "Vendor saved successfully"; 
     // $session->message("Vendor added successfully");
-    redirect(url_for("/user_admin/vendor/show.php?id=" . $new_id));
+    redirect(url_for("/user_admin/vendors/show.php?id=" . $new_id));
   } else {
     //show errors
   }
@@ -35,6 +37,7 @@ include (SHARED_PATH . '/admin_header.php');
     <form action="<?php echo url_for("/user_admin/vendors/new.php"); ?>" method="post">
 
     <?php include ('vendor_form.php'); ?>
+
       <div id="operations">
         <input type="submit" value="Add Vendor" />
       </div>

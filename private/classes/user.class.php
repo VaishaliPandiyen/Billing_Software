@@ -3,21 +3,25 @@
 class User extends Crud {
 
   static protected $table_name = "users";
-  static protected $db_columns = ['id', 'first_name', 'last_name', 'email', 'username', 'user_type', 'hashed_password'];
+  static protected $db_columns = ['u_id', 'first_name', 'last_name', 'email', 'username', 'user_type', 'hashed_password'];
 
-  public $id;
+  static protected $id = "u_id";
   public $first_name;
   public $last_name;
   public $email;
   public $username;
   public $user_type;
   protected $hashed_password;
+
+  // password variables (not passed to the db)
   public $password;
   public $confirm_password;
   protected $password_required = true;
 
+  public const TYPE = ['Admin', 'Staff'];
+
   public function __construct($args=[]) {
-    $this->id;
+    $this->u_id = static::$id;
     $this->first_name = $args['first_name'] ?? '';
     $this->last_name = $args['last_name'] ?? '';
     $this->email = $args['email'] ?? '';
@@ -82,7 +86,7 @@ class User extends Crud {
       $this->errors[] = "Username cannot be blank.";
     } elseif (!has_len($this->username, array('min' => 8, 'max' => 255))) {
       $this->errors[] = "Username must be between 8 and 255 characters.";
-    } elseif (!unique_username($this->username, $this->id ?? 0)) {
+    } elseif (!unique_username($this->username, static::$id ?? 0)) {
       $this->errors[] = "Username not allowed. Try another.";
     }
 

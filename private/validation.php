@@ -98,7 +98,7 @@ function unique_username($username, $current_id="0") {
 
     $sql = "SELECT * FROM users ";
     $sql .= "WHERE username='" . esc($db, $username) . "' ";
-    $sql .= "AND id != '" . esc($db, $current_id) . "'";
+    $sql .= "AND u_id != '" . esc($db, $current_id) . "'";
 
     $r = $db->query($sql);
     $user_count = $r->num_rows;
