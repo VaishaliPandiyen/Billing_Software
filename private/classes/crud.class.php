@@ -70,7 +70,7 @@ class Crud
             }
         }
         return $object;
-    }    
+    }
 
     protected function validate()
     {

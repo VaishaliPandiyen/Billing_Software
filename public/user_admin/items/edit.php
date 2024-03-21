@@ -27,7 +27,7 @@ if (is_post()) {
   if ($result === true) {
     $_SESSION['message'] = "Item updated successfully";
     // $session->message('Item was updated successfully.');
-    redirect(url_for("/user_admin/items/show.php?id=" . $id));
+    // redirect(url_for("/user_admin/items/show.php?id=" . $id));
   } else {
     // errors
   }

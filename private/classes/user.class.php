@@ -1,6 +1,7 @@
 <?php
 
-class User extends Crud {
+class User extends Crud
+{
 
   static protected $table_name = "users";
   static protected $db_columns = ['u_id', 'first_name', 'last_name', 'email', 'username', 'user_type', 'hashed_password'];
@@ -20,7 +21,8 @@ class User extends Crud {
 
   public const TYPE = ['Admin', 'Staff'];
 
-  public function __construct($args=[]) {
+  public function __construct($args = [])
+  {
     $this->u_id = static::$id;
     $this->first_name = $args['first_name'] ?? '';
     $this->last_name = $args['last_name'] ?? '';
@@ -31,50 +33,63 @@ class User extends Crud {
     $this->confirm_password = $args['confirm_password'] ?? '';
   }
 
-  public function full_name() {
+  public function full_name()
+  {
     return $this->first_name . " " . $this->last_name;
   }
 
-  protected function set_hashed_password() {
+  protected function set_hashed_password()
+  {
     $this->hashed_password = password_hash($this->password, PASSWORD_BCRYPT);
   }
 
-  public function verify_password($password) {
+  public function verify_password($password)
+  {
     return password_verify($password, $this->hashed_password);
   }
 
-  protected function create() {
+  protected function create()
+  {
     $this->set_hashed_password();
     return parent::create();
   }
 
-  protected function update() {
-    if($this->password != '') {
+  protected function update()
+  {
+    if ($this->password != '') {
       $this->set_hashed_password();
       // validate password
     } else {
+      echo "Password isn't changing";
       // password not being updated, skip hashing and validation
       $this->password_required = false;
     }
     return parent::update();
   }
 
-  protected function validate() {
+  protected function is_creating()
+  {
+    // Check if the object is being created (not updated)
+    return empty ($this->id); // returns true if the id is empty.
+  }
+
+  protected function validate()
+  {
     $this->errors = [];
 
-    if(is_blank($this->first_name)) {
+    if (is_blank($this->first_name)) {
       $this->errors[] = "First name cannot be blank.";
     } elseif (!has_len($this->first_name, array('min' => 2, 'max' => 255))) {
       $this->errors[] = "First name must be between 2 and 255 characters.";
     }
 
-    if(is_blank($this->last_name)) {
+    if (is_blank($this->last_name)) {
       $this->errors[] = "Last name cannot be blank.";
     } elseif (!has_len($this->last_name, array('min' => 2, 'max' => 255))) {
       $this->errors[] = "Last name must be between 2 and 255 characters.";
     }
 
-    if(is_blank($this->email)) {
+    if (is_blank($this->email)) {
       $this->errors[] = "Email cannot be blank.";
     } elseif (!has_len($this->email, array('max' => 255))) {
       $this->errors[] = "Last name must be less than 255 characters.";
@@ -82,16 +97,16 @@ class User extends Crud {
       $this->errors[] = "Email must be a valid format.";
     }
 
-    if(is_blank($this->username)) {
+    if (is_blank($this->username)) {
       $this->errors[] = "Username cannot be blank.";
     } elseif (!has_len($this->username, array('min' => 8, 'max' => 255))) {
       $this->errors[] = "Username must be between 8 and 255 characters.";
-    } elseif (!unique_username($this->username, static::$id ?? 0)) {
+    } elseif ($this->is_creating() && !unique_username($this->username, static::$id ?? 0)) {
       $this->errors[] = "Username not allowed. Try another.";
     }
 
-    if($this->password_required) {
-      if(is_blank($this->password)) {
+    if ($this->password_required) {
+      if (is_blank($this->password)) {
         $this->errors[] = "Password cannot be blank.";
       } elseif (!has_len($this->password, array('min' => 12))) {
         $this->errors[] = "Password must contain 12 or more characters";
@@ -105,21 +120,24 @@ class User extends Crud {
         $this->errors[] = "Password must contain at least 1 symbol";
       }
 
-      if(is_blank($this->confirm_password)) {
-        $this->errors[] = "Confirm password cannot be blank.";
-      } elseif ($this->password !== $this->confirm_password) {
-        $this->errors[] = "Password and confirm password must match.";
+      if ($this->is_creating()) {
+        if (is_blank($this->confirm_password)) {
+          $this->errors[] = "Confirm password cannot be blank.";
+        } elseif ($this->password !== $this->confirm_password) {
+          $this->errors[] = "Password and confirm password must match.";
+        }
       }
     }
 
     return $this->errors;
   }
 
-  static public function find_by_username($username) {
+  static public function find_by_username($username)
+  {
     $sql = "SELECT * FROM " . static::$table_name . " ";
     $sql .= "WHERE username='" . self::$db->escape_string($username) . "'";
     $obj_array = static::find_sql($sql);
-    if(!empty($obj_array)) {
+    if (!empty ($obj_array)) {
       return array_shift($obj_array);
     } else {
       return false;

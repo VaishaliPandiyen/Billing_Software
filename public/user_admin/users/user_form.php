@@ -14,7 +14,7 @@ if (!isset ($user)) {
 
 <dl>
 <dt>Last name</dt>
-<dd><input type="text" name="user[last_name"] value="<?php echo h($user->last_name); ?>" /></dd>
+<dd><input type="text" name="user[last_name]" value="<?php echo h($user->last_name); ?>" /></dd>
 </dl>
 
 <dl>
@@ -32,9 +32,7 @@ if (!isset ($user)) {
 <dd>
     <select name="user[user_type]">
     <?php foreach (User::TYPE as $t) { ?>
-        <option value="<?php echo $t; ?>" <?php if ($user->user_type == $t) {
-                echo 'selected';
-            } ?>><?php echo $t; ?></option>
+        <option value="<?php echo $t; ?>" <?php if ($user->user_type == $t) { echo 'selected'; } ?>><?php echo $t; ?></option>
     <?php } ?>
     </select>
 </dd>

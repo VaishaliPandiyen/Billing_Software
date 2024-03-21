@@ -21,23 +21,21 @@ if (is_post()) {
 
   if ($result === true) {
     $_SESSION['message'] = 'User updated.';
-    redirect(url_for('/user_admin/users/index.php'));
+    // redirect(url_for('/user_admin/users/index.php'));
   } else {
     // error
   }
 }
 
+$page_title = 'Edit User';
+include (SHARED_PATH . '/admin_header.php'); 
 ?>
-
-<?php $page_title = 'Edit User'; ?>
-<?php include (SHARED_PATH . '/admin_header.php'); ?>
 
 <div id="content">
 
   <a class="back-link" href="<?php echo url_for('/user_admin/users/index.php'); ?>">&laquo; Back to List</a>
 
   <div class="admin new">
-    <h1>Edit User</h1>
 
     <form action="<?php echo url_for('/user_admin/users/edit.php?id=' . h(u($id))); ?>" method="post">
 
