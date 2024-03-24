@@ -109,7 +109,7 @@ class Crud
             return false;
         }
 
-        $attributes = $this->sanitized_attributes();
+        $attributes = $this->sanitized_attributes(); // TODO: Debug this
         $attribute_pairs = [];
         foreach ($attributes as $key => $value) {
             $attribute_pairs[] = "{$key}='{$value}'";
