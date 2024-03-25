@@ -26,10 +26,18 @@ if(!isset($item)) {
   <dt>Vendor</dt>
   <dd>
     <select name="item[v_id]">
-    <?php $vi = [1,2,3];
-    foreach($vi as $v) { ?>
-        <option value="<?php echo $v?>" <?php if($item->v_id == $v) { echo 'selected'; } ?>><?php echo $v?></option>
-    <?php } ?>
+    <?php
+      $vendors = Vendor::find_all();
+      foreach ($vendors as $vendor) {
+        $v_id = $vendor->v_id;
+        $v_name = $vendor->v_name;
+        ?>
+        <option value="<?php echo h($v_id); ?>" <?php if ($item->v_id == $v_id) {
+          echo 'selected';
+        } ?>><?php echo h($v_name); ?></option>
+        <?php
+      }
+      ?>
     </select>
   </dd>  
 </dl>
