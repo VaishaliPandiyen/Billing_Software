@@ -8,11 +8,10 @@ if(is_post()) {
   $result = $user->save();
   
   if($result === true) {
-    var_dump("<hr> Result: <br>". $result);
     $new_id = $user->getId();
-    var_dump("<hr>".$new_id."</hr>");
     $_SESSION['message'] = 'User created.';
-    // redirect(url_for('/user_admin/users/index.php'));
+    // $session->message("User added successfully");
+    redirect(url_for('/user_admin/users/index.php'));
   } else {
     // show errors
   }

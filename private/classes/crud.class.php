@@ -93,7 +93,6 @@ class Crud
         $sql .= ") VALUES ('";
         $sql .= join("', '", array_values($attributes));
         $sql .= "')";
-        echo $sql;
         $result = self::$db->query($sql);
         if ($result) {
             static::$id = self::$db->insert_id;
@@ -109,7 +108,7 @@ class Crud
             return false;
         }
 
-        $attributes = $this->sanitized_attributes(); // TODO: Debug this
+        $attributes = $this->sanitized_attributes();
         $attribute_pairs = [];
         foreach ($attributes as $key => $value) {
             $attribute_pairs[] = "{$key}='{$value}'";

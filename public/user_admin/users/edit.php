@@ -21,7 +21,8 @@ if (is_post()) {
 
   if ($result === true) {
     $_SESSION['message'] = 'User updated.';
-    // redirect(url_for('/user_admin/users/index.php'));
+    // $session->message('User was updated successfully.');
+    redirect(url_for('/user_admin/users/index.php'));
   } else {
     // error
   }

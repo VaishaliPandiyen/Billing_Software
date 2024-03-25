@@ -25,7 +25,7 @@ include(SHARED_PATH . '/admin_header.php');
       ?>
         <tr>
           <td><?php echo h($u->u_id); ?></td>
-          <td><?php echo h($u->first_name)." ".h($u->last_name); ?></td>
+          <td><?php echo h($u->full_name()); ?></td>
           <td><?php echo h($u->user_type); ?></td>
           <td><?php echo h($u->email); ?></td>
           <td><a class="action" href="<?php echo url_for("/user_admin/users/edit.php?id=" . h(u($u->u_id))); ?>">Edit</a></td>

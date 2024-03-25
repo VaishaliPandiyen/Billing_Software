@@ -21,9 +21,9 @@ if (is_post()) {
   $_SESSION['message'] = "Item deleted successfully";
   redirect(url_for('/user_admin/items/index.php'));
 } 
-?>
-<?php $page_title = 'Delete Item'; ?>
-<?php include(SHARED_PATH . '/admin_header.php'); ?>
+
+$page_title = 'Delete Item';
+include(SHARED_PATH . '/admin_header.php'); ?>
 
 <div id="content">
 

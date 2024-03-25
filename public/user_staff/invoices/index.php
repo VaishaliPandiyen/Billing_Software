@@ -3,7 +3,7 @@
 // In URL, index.php?page=2 will be there for >1st page
 $curr_pg = $_GET['page'] ?? 1;
 $per_pg = 15;
-$total;
+$total = 5; //dummy till I make count_all() -- Invoice class
 // $total = Invoice::count_all();
 
 $pagination = new Pagination($curr_pg, $per_pg, $total);
