@@ -12,7 +12,7 @@ if (is_post()) {
     $sale = new Sale($args);
     $invoice = new Invoice($args);
     $result_s = $sale->save();
-    $result_i = $invoice->save();
+    $result_i = $invoice->save(); 
 
     foreach ($_POST['s_item'] as $item) {
         $sale = [];
