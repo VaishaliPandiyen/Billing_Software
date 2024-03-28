@@ -14,15 +14,17 @@ if (is_post()) {
     // $result_i = $invoice->save();
 
     foreach ($_POST['sale'] as $item) {
-        $args_s = $_POST['sale'];
+        $args_s = $item;
         $sale = new Sale($args_s);
         ?><pre><?php var_dump($sale); ?></pre><?php
 
         // $result_s = $sale->save();
-        if ($result_s === true) {}
+        if ($result_s === true) {
+            $new_sale_id = $sale->getId();
+        }
     }
 
-    if ($result_i === true && $result_s === true) {
+    if ($result_i === true) {
         // id created in crud class
         $new_id = $invoice->getId();
         $_SESSION['message'] = "Invoice saved successfully";
@@ -47,17 +49,6 @@ include (SHARED_PATH . '/staff_header.php');
   <div class="subject new">
 
     <form action="<?php echo url_for("/user_staff/invoices/new.php"); ?>" method="post">
-        <dl>
-            <dt>Mode</dt>
-            <dd>
-            <select name="invoice[i_mode]">
-            <?php foreach (Invoice::MODE as $m) { ?>
-                        <option value="<?php echo $m; ?>" <?php if ($invoice->i_mode == $m) {
-                               echo 'selected';
-                           } ?>><?php echo $m; ?></option>
-            <?php } ?>
-            </select>
-        </dl>
         <dl name="items">
             <label for="sale[s_item]">Items:</label>
             <div id="items-container">
@@ -76,7 +67,18 @@ include (SHARED_PATH . '/staff_header.php');
             
             <!-- Button to add new item selector and quantity input -->
             <button type="button" onclick="addItem()">+</button>
-      
+        </dl>
+        <dl>
+            <dt>Mode</dt>
+            <dd>
+            <select name="invoice[i_mode]">
+            <?php foreach (Invoice::MODE as $m) { ?>
+                <option value="<?php echo $m; ?>" 
+                <?php if ($invoice->i_mode == $m) { echo 'selected'; } ?>>
+                    <?php echo $m; ?>
+                </option>
+            <?php } ?>
+            </select>
         </dl>
         <div id="operations">
             <input type="submit" value="Add invoice" />
@@ -86,5 +88,31 @@ include (SHARED_PATH . '/staff_header.php');
   </div>
 
 </div>
+<script>
+    console.log("Script running...");
+    function addItem() {
+        let itemsContainer = document.getElementById('items-container');
+        console.log(itemsContainer);
+        let newItem = document.createElement('div');
+        newItem.innerHTML = `
+            <select name="sale[s_item][]">
+                <?php foreach ($fruits as $f) { ?>
+                    <option value="<?php echo h($f->f_name) ?>">
+                        <?php echo h($f->f_name) ?>
+                    </option>
+                <?php } ?>
+            </select>
+            <input type="text" name="sale[s_quantity][]" placeholder="Enter quantity" pattern="[0-9]+(\.[0-9]+)?" title="Enter a valid decimal number">kg(s)
+            <button type="button" class="remove-item" onclick="removeItem(this)">-</button>
+        `;
+        itemsContainer.appendChild(newItem);
+    }
+
+    function removeItem(element) {
+        let itemToRemove = element.parentNode;
+        itemToRemove.parentNode.removeChild(itemToRemove);
+    }
+</script>
+
 <?php include (SHARED_PATH . '/staff_footer.php');
 ?>
