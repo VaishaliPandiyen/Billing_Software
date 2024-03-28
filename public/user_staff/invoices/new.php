@@ -6,27 +6,28 @@ $fruits = Fruit::find_all();
 
 if (is_post()) {
     //  $_POST["sale"] has data from form fields with name="sale[x]" instead of writing $args['x'] = $_POST['x'] ?? NULL;
-    $args = $_POST['sale'];
-    $args = $_POST['invoice'];
+    $args_i = $_POST['invoice'];
     // Remember __construct($args = [])!?
-    $sale = new Sale($args);
-    $invoice = new Invoice($args);
-    $result_s = $sale->save();
-    $result_i = $invoice->save(); 
+    $invoice = new Invoice($args_i);
+    ?><pre><?php var_dump($invoice); ?></pre><?php 
+   
+    // $result_i = $invoice->save();
 
-    foreach ($_POST['s_item'] as $item) {
-        $sale = [];
-        $sale["s_item"] = $item["s_item"] ?? "";
-        $sale["s_quantity"] = $item["s_quantity"] ?? "";
-        $sales[] = $sale;
+    foreach ($_POST['sale'] as $item) {
+        $args_s = $_POST['sale'];
+        $sale = new Sale($args_s);
+        ?><pre><?php var_dump($sale); ?></pre><?php
+
+        // $result_s = $sale->save();
+        if ($result_s === true) {}
     }
 
     if ($result_i === true && $result_s === true) {
         // id created in crud class
-        $new_id = $item->getId();
+        $new_id = $invoice->getId();
         $_SESSION['message'] = "Invoice saved successfully";
         // $session->message("Invoice created successfully");
-        redirect(url_for("/user_staff/invoices/show.php?id=" . $new_id));
+        // redirect(url_for("/user_staff/invoices/show.php?id=" . $new_id));
     }
 } else {
     // display blank form:
@@ -64,10 +65,12 @@ include (SHARED_PATH . '/staff_header.php');
                 <div id="item-1">
                     <select name="sale[s_item]">
                     <?php foreach ($fruits as $f) { ?>
-                                <option value="<?php echo h($f->f_name) ?>"><?php echo h($f->f_name) ?></option>
+                        <option value="<?php echo h($f->f_name) ?>">
+                                <?php echo h($f->f_name) ?>
+                        </option>
                     <?php } ?>
                     </select>
-                    <input type="text" name="s_quantity" placeholder="Enter quantity" pattern="[0-9]+(\.[0-9]+)?" title="Enter a valid decimal number">kg(s)
+                    <input type="text" name="sale[s_quantity]" placeholder="Enter quantity" pattern="[0-9]+(\.[0-9]+)?" title="Enter a valid decimal number">kg(s)
                 </div>
             </div>
             

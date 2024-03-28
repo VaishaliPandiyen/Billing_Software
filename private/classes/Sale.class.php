@@ -3,8 +3,7 @@
 class Sale extends Crud
 {
     static protected $table_name = 'sale';
-    static protected $db_columns = ['s_id', 'i_id', 's_quantity', 's_item', 's_value'
-];
+    static protected $db_columns = ['s_id', 'i_id', 's_quantity', 's_item', 's_value'];
 
     static protected $id = 's_id';
 

@@ -7,7 +7,7 @@ const addItem = async () => {
   newItem.id = itemId;
   // Create select element
   let select = document.createElement("select");
-  select.name = "s_item";
+  select.name = "sale[s_item]";
   // Create quantity input and other elements
 
   let xhr = new XMLHttpRequest();
@@ -24,7 +24,7 @@ const addItem = async () => {
         select.appendChild(option);
     });
     newItem.innerHTML += `
-    <input type="number" name="s_quantity" placeholder="Enter quantity"><p style="display: inline;">kg(s)</p>
+    <input type="number" name="sale[s_quantity]" placeholder="Enter quantity"><p style="display: inline;">kg(s)</p>
     <button type="button" onclick="removeItem(this)">-</button><br><br>`;
     container.appendChild(newItem);
     }
