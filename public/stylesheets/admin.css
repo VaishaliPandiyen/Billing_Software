@@ -9,4 +9,27 @@ body {
 footer {
   height: 5vh;
   margin-top: auto;
+  text-align: center;
+}
+header {
+  padding: 5px;
+}
+a {
+  text-decoration: none;
+  font-style: italic;
+}
+header > a, nav > a {
+  float: right;
+  margin-right: 5px;
+}
+h2 {
+  margin-left: 10px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.admin_menu {
+  border: 1px solid lightgray;
+  padding: 15px 20px;
+  background: #0001;
+  border-radius: 2px;
 }

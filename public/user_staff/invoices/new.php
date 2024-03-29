@@ -6,9 +6,13 @@ $fruits = Fruit::find_all();
 
 if (is_post()) {
     $total_sale_value = 0;
+    $sales = [];
 
     foreach ($_POST['sale'] as $s) {
-        $name = $s["s_item"];
+        echo "Grr";
+        print_r($s);
+        // $name = $s["s_item"];
+        $name = $s;
         
         // Find the fruit object with the matching name
         $selected_fruit = null;
@@ -31,6 +35,7 @@ if (is_post()) {
             ];
     
             $sale = new Sale($invoice, $args_s);
+            $sales[] = $sale; 
             // $result_s = $sale->save();
     
             $total_sale_value += $s_value;
@@ -44,6 +49,7 @@ if (is_post()) {
         'i_total' => $total_sale_value
     ];
     $invoice = new Invoice($args_i);
+    ?><pre><?php var_dump($invoice); ?></pre><?php 
 
     // Save the invoice to generate i_id
     $result_i = $invoice->save();
@@ -51,7 +57,8 @@ if (is_post()) {
     if ($result_i === true) {
         // Update the i_id for each sale with the generated i_id of the invoice
         foreach ($sale as $s) {
-            $sale->i_id = $invoice->i_id;
+            $s->i_id = $invoice->i_id;
+            ?><pre><?php var_dump($s); ?></pre><?php 
             $result_s = $s->save();
         }
         $_SESSION['message'] = "Invoice saved successfully";
@@ -118,14 +125,14 @@ include (SHARED_PATH . '/staff_header.php');
         let c = document.getElementById('items-container');
         let item = document.createElement('div');
         item.innerHTML = `
-            <select name="sale[s_item][]">
+            <select name="sale[s_item]">
                 <?php foreach ($fruits as $f) { ?>
                     <option value="<?php echo h($f->f_name) ?>">
                         <?php echo h($f->f_name) ?>
                     </option>
                 <?php } ?>
             </select>
-            <input type="text" name="sale[s_quantity][]" placeholder="Enter quantity" pattern="[0-9]+(\.[0-9]+)?" title="Enter a valid decimal number">kg(s)
+            <input type="text" name="sale[s_quantity]" placeholder="Enter quantity" pattern="[0-9]+(\.[0-9]+)?" title="Enter a valid decimal number">kg(s)
             <button type="button" class="remove-item" onclick="remove_item(this)">-</button>
         `;
         c.appendChild(item);
