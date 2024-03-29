@@ -6,6 +6,7 @@ class Invoice extends Crud
     static protected $db_columns = ['i_id', 'i_date', 'i_mode', 'i_total'];
     static protected $id = 'i_id';
 
+    public $i_id; // Change this from protected to public to access while saving each sale
     public $i_date;
     public $i_mode;
     public $i_total;
