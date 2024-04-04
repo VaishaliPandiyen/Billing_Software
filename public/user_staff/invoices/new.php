@@ -9,8 +9,9 @@ if (is_post()) {
     $sales = [];
 
     foreach ($_POST['sale'] as $s) {
-        echo "Grr";
-        print_r($s);
+        echo "For each sale post: <br>";
+        var_dump($s);
+        echo "<hr>";
         // $name = $s["s_item"];
         $name = $s;
         
@@ -25,7 +26,8 @@ if (is_post()) {
         
         if ($selected_fruit) {
             // Calculate s_value based on the quantity and price of the selected fruit
-            $s_value = $selected_fruit->s_price * $s['s_quantity'];
+            $s_value = intval($selected_fruit->s_price) * intval($s['s_quantity']); // s_value input is a string, convert it to a number to add tot total
+            echo "s_value: ". $s_value. "<br>";
             
             $args_s = [
                 'i_id' => null, // Will be updated after saving invoice
@@ -36,12 +38,16 @@ if (is_post()) {
     
             $sale = new Sale($invoice, $args_s);
             $sales[] = $sale; 
-            // $result_s = $sale->save();
+            $result_s = $sale->save();
     
             $total_sale_value += $s_value;
         }
     }
+    echo "Total sale value: <br>";
+    var_dump($total_sale_value);
+    echo "<hr>";
 
+    date_default_timezone_set('Europe/London'); 
     // Create the invoice with the initial total value
     $args_i = [
         'i_date' => date('Y-m-d H:i:s'),
@@ -49,14 +55,14 @@ if (is_post()) {
         'i_total' => $total_sale_value
     ];
     $invoice = new Invoice($args_i);
-    ?><pre><?php var_dump($invoice); ?></pre><?php 
+    ?><pre><?php echo"Invoice: <br>"; var_dump($invoice); ?></pre><?php 
 
     // Save the invoice to generate i_id
     $result_i = $invoice->save();
 
     if ($result_i === true) {
         // Update the i_id for each sale with the generated i_id of the invoice
-        foreach ($sale as $s) {
+        foreach ($sales as $s) {
             $s->i_id = $invoice->i_id;
             ?><pre><?php var_dump($s); ?></pre><?php 
             $result_s = $s->save();
@@ -83,20 +89,36 @@ include (SHARED_PATH . '/staff_header.php');
     <form action="<?php echo url_for("/user_staff/invoices/new.php"); ?>" method="post">
         <dl name="items">
             <label for="sale[s_item]">Items:</label>
-            <div id="items-container">
-                <!-- Initial item selector and quantity input -->
-                <div id="item-1">
-                    <select name="sale[s_item]">
-                    <?php foreach ($fruits as $f) { ?>
-                        <option value="<?php echo h($f->f_name) ?>">
+
+            <template id="item-template">
+                <div class="sale-item" id="item-1">
+                    <select name="sale[0][s_item]">
+                        <?php foreach ($fruits as $f) { ?>
+                            <option value="<?php echo h($f->f_name) ?>">
                                 <?php echo h($f->f_name) ?>
-                        </option>
-                    <?php } ?>
+                            </option>
+                        <?php } ?>
                     </select>
-                    <input type="text" name="sale[s_quantity]" placeholder="Enter quantity" pattern="[0-9]+(\.[0-9]+)?" title="Enter a valid decimal number">kg(s)
+                    <input type="text" name="sale[0][s_quantity]" placeholder="Enter quantity" pattern="[0-9]+(\.[0-9]+)?" title="Enter a valid decimal number">kg(s)
+                    <button type="button" class="remove-item" onclick="remove_item(this)">-</button>
+                </div>
+            </template>
+
+            <div id="items-container">
+                <!-- Initial sale item -->
+                <div class="sale-item" id="item-1">
+                    <select name="sale[0][s_item]">
+                        <?php foreach ($fruits as $f) { ?>
+                            <option value="<?php echo h($f->f_name) ?>">
+                                <?php echo h($f->f_name) ?>
+                            </option>
+                        <?php } ?>
+                    </select>
+                    <input type="text" name="sale[0][s_quantity]" placeholder="Enter quantity" pattern="[0-9]+(\.[0-9]+)?" title="Enter a valid decimal number">kg(s)
+                    <button type="button" class="remove-item" onclick="remove_item(this)">-</button>
                 </div>
             </div>
-            
+
             <!-- Button to add new item selector and quantity input -->
             <button type="button" onclick="add_item()">+</button>
         </dl>
@@ -121,21 +143,19 @@ include (SHARED_PATH . '/staff_header.php');
 
 </div>
 <script>
+    let itemCounter = 1; // Counter for unique IDs  
     const add_item = async () => {
         let c = document.getElementById('items-container');
-        let item = document.createElement('div');
-        item.innerHTML = `
-            <select name="sale[s_item]">
-                <?php foreach ($fruits as $f) { ?>
-                    <option value="<?php echo h($f->f_name) ?>">
-                        <?php echo h($f->f_name) ?>
-                    </option>
-                <?php } ?>
-            </select>
-            <input type="text" name="sale[s_quantity]" placeholder="Enter quantity" pattern="[0-9]+(\.[0-9]+)?" title="Enter a valid decimal number">kg(s)
-            <button type="button" class="remove-item" onclick="remove_item(this)">-</button>
-        `;
-        c.appendChild(item);
+        let newItem = document.getElementById('item-template').content.cloneNode(true); // Clone the template container
+        newItem.querySelectorAll('[name^="sale"]').forEach(input => {
+            let newName = input.getAttribute('name').replace('[0]', '[' + itemCounter + ']'); // Update name from sale[0][] to sale[1][]
+            input.setAttribute('name', newName);
+        });
+        newItem.querySelector('.remove-item').addEventListener('click', function() {
+            remove_item(this);
+        });
+        newItem.id = 'item-' + (++itemCounter); // Update item ID 
+        c.appendChild(newItem); // Append the new item to the container
     }
 
     const remove_item = async (element) => {

@@ -18,7 +18,7 @@ a {
   text-decoration: none;
   font-style: italic;
 }
-header > a, nav > a {
+a.head_a{
   float: right;
   margin-right: 5px;
 }

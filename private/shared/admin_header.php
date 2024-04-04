@@ -18,11 +18,11 @@
         </h1>
 <?php if (is_logged_in()) { ?> 
         <p class="text-white">Admin: <?php echo $_SESSION['username'] ?? "" ?></p>
-        <a class="text-white" href="<?php echo url_for("/user_admin/logout.php"); ?>">Logout</a>
+        <a class="text-white head_a" href="<?php echo url_for("/user_admin/logout.php"); ?>">Logout</a>
     </header>
     <nav>
         <!-- <ul><li> -->
-        <a href="<?php echo url_for("/user_admin/index.php"); ?>">Home</a>
+        <a class="head_a" href="<?php echo url_for("/user_admin/index.php"); ?>">Home</a>
         <!-- </li></ul> -->
         <?php echo session_msg(); ?>
     </nav>
