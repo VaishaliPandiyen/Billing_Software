@@ -94,11 +94,11 @@ class Crud
         $sql .= join("', '", array_values($attributes));
         $sql .= "')";
         echo $sql;
-        // $result = self::$db->query($sql);
-        // if ($result) {
-        //     static::$id = self::$db->insert_id;
-        // }
-        // return $result;
+        $result = self::$db->query($sql);
+        if ($result) {
+            static::$id = self::$db->insert_id;
+        }
+        return $result;
     }
 
     // In update & delete, ID isn't passed in as the methods are called on specific records' objects. ID is accessed directly from the object's properties. 

@@ -53,11 +53,12 @@ if (is_post()) {
 
     // Save the invoice to generate i_id
     $result_i = $invoice->save();
+    $new_id = $invoice->getId();
 
     if ($result_i === true) {
         // Update the i_id for each sale with the generated i_id of the invoice
         foreach ($sales as $s) {
-            $s->i_id = $invoice->i_id;
+            $s->i_id = $new_id;
             ?><pre><?php var_dump($s); ?></pre><?php 
             $result_s = $s->save();
         }
@@ -68,7 +69,7 @@ if (is_post()) {
 } else {
     // display blank form:
     $invoice = new Invoice;
-    $sale = new Sale($invoice);
+    $sale = new Sale;
 }
 
 $page_title = 'Add invoice';
