@@ -6,6 +6,7 @@ class Vendor extends Crud
     static protected $db_columns = ['v_id', 'v_name'];
 
     static protected $id = 'v_id';
+    public $v_id;
     public $v_name;
 
     public function __construct($args = [])

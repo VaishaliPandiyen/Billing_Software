@@ -8,13 +8,10 @@ if (is_post()) {
     $total_sale_value = 0;
     $sales = [];
 
+    // Start SAVE EACH ITEM SOLD :--
     foreach ($_POST['sale'] as $s) {
-        echo "For each sale post: <br>";
-        var_dump($s);
-        echo "<hr>";
-        // $name = $s["s_item"];
-        $name = $s;
-        
+        $name = $s["s_item"];
+
         // Find the fruit object with the matching name
         $selected_fruit = null;
         foreach ($fruits as $f) {
@@ -23,29 +20,26 @@ if (is_post()) {
                 break;
             }
         }
-        
+
         if ($selected_fruit) {
             // Calculate s_value based on the quantity and price of the selected fruit
-            $s_value = intval($selected_fruit->s_price) * intval($s['s_quantity']); // s_value input is a string, convert it to a number to add tot total
-            echo "s_value: ". $s_value. "<br>";
+            $s_value = round((floatval($selected_fruit->s_price) * floatval($s['s_quantity'])), 2); // s_value input is a string, convert it to a float to add to total
             
             $args_s = [
-                'i_id' => null, // Will be updated after saving invoice
                 's_item' => $name,
                 's_quantity' => $s['s_quantity'],
-                's_value' => $s_value
+                's_value' => round($s_value, 2)
             ];
+            var_dump($args_s);
     
-            $sale = new Sale($invoice, $args_s);
+            $sale = new Sale($args_s);
             $sales[] = $sale; 
-            $result_s = $sale->save();
+            // $result_s = $sale->save();
     
             $total_sale_value += $s_value;
         }
     }
-    echo "Total sale value: <br>";
-    var_dump($total_sale_value);
-    echo "<hr>";
+     // End SAVE EACH ITEM SOLD
 
     date_default_timezone_set('Europe/London'); 
     // Create the invoice with the initial total value

@@ -7,6 +7,7 @@ class User extends Crud
   static protected $db_columns = ['u_id', 'first_name', 'last_name', 'email', 'username', 'user_type', 'hashed_password'];
 
   static protected $id = "u_id";
+  public $u_id;
   public $first_name;
   public $last_name;
   public $email;

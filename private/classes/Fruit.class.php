@@ -6,6 +6,7 @@ class Fruit extends Crud
     static protected $db_columns = ['f_id', 'f_name', 'f_season', 'v_id', 'b_date', 'b_price', 'b_quantity', 's_price', 's_profit'];
 
     static protected $id = 'f_id';
+    public $f_id;
     public $f_name;
     public $f_season;
     public $v_id;
