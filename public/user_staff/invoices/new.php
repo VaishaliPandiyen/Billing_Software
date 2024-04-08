@@ -5,7 +5,7 @@ require_once ("../../../private/initialise.php");
 $fruits = Fruit::find_all();
 
 if (is_post()) {
-    $total_sale_value = 0;
+    $total_sale_value = 0; 
     $sales = [];
 
     // Start SAVE EACH ITEM SOLD :--
@@ -24,6 +24,8 @@ if (is_post()) {
         if ($selected_fruit) {
             // Calculate s_value based on the quantity and price of the selected fruit
             $s_value = round((floatval($selected_fruit->s_price) * floatval($s['s_quantity'])), 2); // s_value input is a string, convert it to a float to add to total
+
+            // TODO: Update items with remaining quantity (b_quantity - s_quantity)
             
             $args_s = [
                 's_item' => $name,
