@@ -59,6 +59,18 @@ class Crud
         }
     }
 
+    static public function find_all_by_key($key, $id)
+    {
+        $sql = "SELECT * FROM " . static::$table_name . " ";
+        $sql .= "WHERE " . $key . "='" . self::$db->escape_string($id) . "'";
+        $obj_array = static::find_sql($sql);
+        if (!empty ($obj_array)) {
+            return array_shift($obj_array);
+        } else {
+            return false;
+        }
+    }
+
     protected function instantiate($record)
     {
         $class_name = get_called_class(); // Get the name of the child class
