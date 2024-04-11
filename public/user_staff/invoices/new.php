@@ -25,18 +25,28 @@ if (is_post()) {
             // Calculate s_value based on the quantity and price of the selected fruit
             $s_value = round((floatval($selected_fruit->s_price) * floatval($s['s_quantity'])), 2); // s_value input is a string, convert it to a float to add to total
 
-            // TODO: Update items with remaining quantity (b_quantity - s_quantity)
+            $s_quantity = $s['s_quantity'];
+            if ($s_quantity > $selected_fruit->b_quantity) {
+                $errors[] = "Error: Insufficient quantity for " . $name . ". Available quantity: " . $selected_fruit->b_quantity;
+                echo "NO";
+                break;
+            } else {
+                $selected_fruit->b_quantity -= $s_quantity;
+                $fruit_update_result = $selected_fruit->update();
+                if (!$fruit_update_result) {
+                  echo "Error updating fruit quantity";
+                  exit; 
+                }
+            }   
             
             $args_s = [
                 's_item' => $name,
                 's_quantity' => $s['s_quantity'],
                 's_value' => round($s_value, 2)
             ];
-            var_dump($args_s);
     
             $sale = new Sale($args_s);
             $sales[] = $sale; 
-            // $result_s = $sale->save();
     
             $total_sale_value += $s_value;
         }
@@ -51,7 +61,6 @@ if (is_post()) {
         'i_total' => $total_sale_value
     ];
     $invoice = new Invoice($args_i);
-    ?><pre><?php echo"Invoice: <br>"; var_dump($invoice); ?></pre><?php 
 
     // Save the invoice to generate i_id
     $result_i = $invoice->save();
@@ -61,12 +70,11 @@ if (is_post()) {
         // Update the i_id for each sale with the generated i_id of the invoice
         foreach ($sales as $s) {
             $s->i_id = $new_id;
-            ?><pre><?php var_dump($s); ?></pre><?php 
             $result_s = $s->save();
         }
         $_SESSION['message'] = "Invoice saved successfully";
         // $session->message("Item added successfully");
-        // redirect(url_for("/user_staff/invoices/index.php));
+        redirect(url_for("/user_staff/invoices/index.php"));
     }
 } else {
     // display blank form:
@@ -133,6 +141,7 @@ include (SHARED_PATH . '/staff_header.php');
         </dl>
         <div id="operations">
             <input type="submit" value="Add invoice" />
+            <!-- <?php if (!empty($errors)) { echo 'disabled'; } else { echo 'enabled'; } ?> />  -->
         </div>
     </form>
 

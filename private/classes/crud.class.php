@@ -114,7 +114,7 @@ class Crud
     }
 
     // In update & delete, ID isn't passed in as the methods are called on specific records' objects. ID is accessed directly from the object's properties. 
-    protected function update()
+    public function update()
     {
         $this->validate();
         if (!empty ($this->errors)) {
@@ -187,7 +187,6 @@ class Crud
         $sql = "DELETE FROM " . static::$table_name . " ";
         $sql .= "WHERE " . static::$id . "='" . self::$db->escape_string($d_id) . "' ";
         $sql .= "LIMIT 1";
-        echo $sql;
         $result = self::$db->query($sql);
         return $result;
 
@@ -196,4 +195,13 @@ class Crud
         // but, for example, we can't call $user->update() after calling $user->delete().
     }
 
+    public function delete_multi_ref($ref, $d_id)
+    {
+        $sql = "DELETE FROM " . static::$table_name . " ";
+        $sql .= "WHERE " . $ref . "='" . self::$db->escape_string($d_id);
+        $result = self::$db->query($sql);
+        return $result;
+
+        // created to delete multiple sale items when deleting invoice
+    }
 }

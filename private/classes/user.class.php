@@ -55,7 +55,7 @@ class User extends Crud
     return parent::create();
   }
 
-  protected function update()
+  public function update()
   {
     if ($this->password != '') {
       $this->set_hashed_password();

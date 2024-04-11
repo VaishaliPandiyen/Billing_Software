@@ -24,7 +24,7 @@ class Fruit extends Crud
         $this->set_profit();
         return parent::create();
     }
-    protected function update()
+    public function update()
     {
         $this->set_profit();
         return parent::update();

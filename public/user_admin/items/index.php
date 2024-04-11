@@ -2,8 +2,6 @@
 
 $fruits = Fruit::find_all();
 
-?><pre><?php var_dump($fruits) ?></pre><?php 
-
 $page_title = "Items";
 include(SHARED_PATH . "/admin_header.php");
 
