@@ -61,4 +61,24 @@ class Fruit extends Crud
         }
         return $this->errors;
     }
+
+    public function decrease_quantity($quantity) {
+        $this->b_quantity = floatval($this->b_quantity) - floatval($quantity);
+        if ($this->b_quantity < 0) {
+          $this->errors[] = "Error: Insufficient quantity in stock.";
+          return false; // Indicate an error if quantity goes negative
+        }
+        $update_result = $this->update_quantity($quantity);
+        return $update_result;
+      }
+      
+      private function update_quantity($quantity) {
+        $sql = "UPDATE " . static::$table_name . " SET ";
+        $sql .= "b_quantity = b_quantity - '" . self::$db->escape_string($quantity) . "' ";
+        $sql .= "WHERE " . static::$id . "='" . self::$db->escape_string($this->id) . "' ";
+        $sql .= "LIMIT 1";
+        $result = self::$db->query($sql);
+        return $result;
+      }
+      
 }

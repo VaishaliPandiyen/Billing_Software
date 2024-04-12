@@ -24,18 +24,17 @@ if (is_post()) {
         if ($selected_fruit) {
             // Calculate s_value based on the quantity and price of the selected fruit
             $s_value = round((floatval($selected_fruit->s_price) * floatval($s['s_quantity'])), 2); // s_value input is a string, convert it to a float to add to total
-
             $s_quantity = $s['s_quantity'];
+            
             if ($s_quantity > $selected_fruit->b_quantity) {
                 $errors[] = "Error: Insufficient quantity for " . $name . ". Available quantity: " . $selected_fruit->b_quantity;
                 echo "NO";
                 break;
-            } else {
-                $selected_fruit->b_quantity -= $s_quantity;
-                $fruit_update_result = $selected_fruit->update();
-                if (!$fruit_update_result) {
-                  echo "Error updating fruit quantity";
-                  exit; 
+            } else {                
+                $decrease_result = $selected_fruit->decrease_quantity($s_quantity);
+                if (!$decrease_result) {
+                  $errors[] = "Error: Failed to update fruit quantity in database.";
+                  break;
                 }
             }   
             
@@ -47,6 +46,8 @@ if (is_post()) {
     
             $sale = new Sale($args_s);
             $sales[] = $sale; 
+            // var_dump($sale);
+            // echo "<hr>";
     
             $total_sale_value += $s_value;
         }
@@ -69,7 +70,10 @@ if (is_post()) {
     if ($result_i === true) {
         // Update the i_id for each sale with the generated i_id of the invoice
         foreach ($sales as $s) {
+            // $s->i_id = 10;
             $s->i_id = $new_id;
+            // echo "To save: <br>";
+            // var_dump($s);
             $result_s = $s->save();
         }
         $_SESSION['message'] = "Invoice saved successfully";

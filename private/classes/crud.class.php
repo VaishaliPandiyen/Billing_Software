@@ -105,7 +105,7 @@ class Crud
         $sql .= ") VALUES ('";
         $sql .= join("', '", array_values($attributes));
         $sql .= "')";
-        echo $sql;
+        // echo $sql;
         $result = self::$db->query($sql);
         if ($result) {
             static::$id = self::$db->insert_id;
