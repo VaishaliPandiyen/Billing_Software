@@ -47,7 +47,7 @@ if (is_post()) {
             $sale = new Sale($args_s);
             $sales[] = $sale; 
             // var_dump($sale);
-            // echo "<hr>";
+            // echo "<hr>"; 
     
             $total_sale_value += $s_value;
         }
