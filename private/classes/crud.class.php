@@ -181,6 +181,14 @@ class Crud
         }
         return $sanitized;
     }
+    public static function update_one_value($table, $key, $key_value, $column, $new_value) {
+        $sql = "UPDATE " . $table . " SET ";
+        $sql .= $column . "='" . self::$db->escape_string($new_value) . "' ";
+        $sql .= "WHERE " . $key . "='" . self::$db->escape_string($key_value) . "' ";
+        $sql .= "LIMIT 1";
+        $result = self::$db->query($sql);
+        return $result;
+      }
 
     public function delete($d_id)
     {
