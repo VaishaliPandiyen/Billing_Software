@@ -17,11 +17,9 @@ include(SHARED_PATH . "/admin_header.php");
 <p>Item ID: 
     <?php echo h($fruit->f_id); ?>
 <br>Fruit: 
-    <?php echo "&#163;".h($fruit->f_name);?>
+    <?php echo h($fruit->f_name);?>
 <br>Cost: 
-    <?php echo h($fruit->s_price);?>
-<br>
-    <?php echo "(Brought for: &#163;" . h($fruit->b_price)." on ".h($fruit->b_date).")";?>
+    <?php echo "&#163;".h($fruit->s_price);?>
 </p>
 <a href="<?php echo url_for("/user_admin/items/index.php"); ?>"> &laquo; Back to item list</a>
 

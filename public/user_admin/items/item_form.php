@@ -22,7 +22,7 @@ if(!isset($item)) {
   </dd>
 </dl>
 
-<dl>
+<!-- <dl>
   <dt>Vendor</dt>
   <dd>
     <select name="item[v_id]">
@@ -40,9 +40,9 @@ if(!isset($item)) {
       ?>
     </select>
   </dd>  
-</dl>
+</dl> -->
 
-<dl>
+<!-- <dl>
     <dt>Buying Date</dt>
     <dd><input type="date" name="item[b_date]" value="<?php echo h($item->b_date); ?>" /></dd>
 </dl>
@@ -55,7 +55,7 @@ if(!isset($item)) {
 <dl>
   <dt>Buying Quantity</dt>
   <dd><input type="number" name="item[b_quantity]" step="0.01" min="0" value="<?php echo h($item->b_quantity); ?>" /></dd>
-</dl>
+</dl> -->
 
 <dl>
   <dt>Selling Price</dt>
